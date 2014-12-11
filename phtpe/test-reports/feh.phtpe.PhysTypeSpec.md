@@ -1,15 +1,15 @@
 ## PhysTypeSpec
   
 ```scala  
-    import feh.phtpe._
-    import short._
+import feh.phtpe._
+import short._
 ```
 
 [+] __Equality Tests__ 
 ```scala 
-    [+] areEqual[kg**m/(s^_2), Newton]
-    [+] areEqual[(kg**m/s)^_2, kg**m**N]    
-    [+] areEqual[(kg**m/s)^_2, kg**N] must beFalse
+    [+] PhysType.areEqual[kg**m/(s^_2), Newton]
+    [+] PhysType.areEqual[(kg**m/s)^_2, kg**m**N]    
+    [+] PhysType.areEqual[(kg**m/s)^_2, kg**N] must beFalse
 ```
     
 | PhysTypeSpec |
