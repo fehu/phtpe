@@ -32,6 +32,9 @@ object PhysType {
       final type **[L <: PhysType, R <: PhysType] = Binary.Multiplication[L, R]
       final type /[L <: PhysType, R <: PhysType]  = Binary.Division[L, R]
       final type ^[Tpe <: PhysType, Pow <: IntegerConstant] = Unary.Power[Tpe, Pow]
+
+      final type -[C <: IntegerConstant] = NegativeIntegerConstant[C]
+      final type ^-[Tpe <: PhysType, Pow <: IntegerConstant] = Unary.Power[Tpe, -[Pow]]
     }
     object Alias extends Alias
   }
@@ -46,6 +49,8 @@ object PhysType {
   class _6 private() extends IntegerConstant
   class _7 private() extends IntegerConstant
   class _8 private() extends IntegerConstant
+
+  trait NegativeIntegerConstant[Original <: IntegerConstant] extends IntegerConstant
 
   /** aborts on compile */
   def proveEqual[Tpe <: PhysType, Expected <: PhysType]: scala.Unit = macro PhysTypeEqualProves.atCompile[Tpe, Expected]

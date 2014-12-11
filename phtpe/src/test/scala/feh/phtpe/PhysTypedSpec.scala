@@ -10,25 +10,48 @@ class PhysTypedSpec extends Specification {
   def is = s2""" ${"PhysTyped Specification".name}
 
   __Equality__
-    ${ 5.@@[N] phEq 5.of[Newton] }
-    ${ 6.@@[N] phEq 5.of[Newton] must beFalse }
-    ${ 5.@@[N] phEq 5.of[kg] must beFalse }
-    ${ 5.@@[(kg**m/s)^_2] phEq 5.@@[kg**m**N] }
-    ${ 5.@@[(kg**m/s)^_2] phEq 5.@@[kg**N] must beFalse }
+    ${ 5.of[N] phEquals 5.of[Newton] }
+    ${ 6.of[N] phEquals 5.of[Newton] must beFalse }
+    ${ 5.of[N] phEquals 5.of[kg] must beFalse }
+
+    ${ 5.of[(kg**m/s)^_2] phEquals 5.of[kg**m**N] }
+    ${ 5.of[(kg**m/s)^_2] phEquals 5.of[kg**N] must beFalse }
 
   __Sum__
-    ${ 1.@@[N] + 2.@@[N] phEq 3.@@[N] }
-    ${ 1.@@[N] + 2.@@[N] phEq 10.@@[N] must beFalse }
-    ${ 1.@@[N] soft_+ 2.@@[N] map (_ phEq 3.@@[N]) must beSome(true) }
-    ${ 1.@@[N] soft_+ 2.@@[N] map (_ phEq 10.@@[N]) must beSome(false) }
-    ${ 1.@@[N] soft_+ 2.@@[kg] map (_ phEq 3.@@[N]) must beNone }
+    ${ 1.of[N] + 2.of[N] phEquals 3.of[N] }
+    ${ 1.of[N] + 2.of[N] phEquals 10.of[N] must beFalse }
+
+    ${ 1.of[N] soft_+ 2.of[N] map (_ phEquals 3.of[N]) must beSome(true) }
+    ${ 1.of[N] soft_+ 2.of[N] map (_ phEquals 10.of[N]) must beSome(false) }
+    ${ 1.of[N] soft_+ 2.of[kg] map (_ phEquals 3.of[N]) must beNone }
 
   __Subtraction__
-    ${ 10.@@[kg] - 5.@@[kg] phEq 5.@@[kg] }
-    ${ 10.@@[kg] - 2.@@[kg]  phEq 5.@@[kg] must beFalse }
-    ${ 1.@@[kg] soft_- 2.@@[kg] map (_ phEq (-1).@@[kg]) must beSome(true) }
-    ${ 1.@@[kg] soft_- 2.@@[kg] map (_ phEq (-1).@@[N]) must beSome(false) }
-    ${ 1.@@[kg] soft_- 2.@@[kg] map (_ phEq   1.@@[kg]) must beSome(false) }
-    ${ 1.@@[kg] soft_- 2.@@[s] map (_ phEq 3.@@[kg]) must beNone }
+    ${ 10.of[kg] - 5.of[kg] phEquals 5.of[kg] }
+    ${ 10.of[kg] - 2.of[kg]  phEquals 5.of[kg] must beFalse }
+
+    ${ 1.of[kg] soft_- 2.of[kg] map (_ phEquals (-1).of[kg]) must beSome(true) }
+    ${ 1.of[kg] soft_- 2.of[kg] map (_ phEquals (-1).of[N]) must beSome(false) }
+    ${ 1.of[kg] soft_- 2.of[kg] map (_ phEquals   1.of[kg]) must beSome(false) }
+    ${ 1.of[kg] soft_- 2.of[s] map (_ phEquals 3.of[kg]) must beNone }
+
+  __Multiplication__
+    ${ 2.of[N] * 3.of[s] phEquals 6.of[kg**m/s] }
+    ${ 2.of[N] * 3.of[s] phEquals 6.of[kg**m] must beFalse}
+    ${ 2.of[N] * 2.of[s] phEquals 6.of[kg**m/s] must beFalse}
+
+    ${ 2.of[N] * 3 phEquals 6.of[N] }
+    ${ 3 x 2.of[N] phEquals 6.of[N] }
+
+  __Division__
+    ${ (6.of[N] / 3.of[kg]) phEquals 2.of[m/(s^_2)] }
+    ${ (6.of[N] / 3.of[kg]) phEquals 3.of[m/(s^_2)] must beFalse }
+
+    ${ 10.of[N] / 2 phEquals 5.of[N] }
+    ${ 10 \ 2.of[N] phEquals 5.of[N ^-_1] }
+
+    ${ (7.of[N] / 2.of[kg]) phEquals 3.of[m/(s^_2)] }
+    ${ (7d.of[N] / 2d.of[kg]) phEquals 3d.of[m/(s^_2)] must beFalse }
+    ${ (7d.of[N] / 2d.of[kg]) phEquals 3.5.of[m/(s^_2)] }
+
   """
 }

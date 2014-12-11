@@ -48,11 +48,11 @@ class PhysTypeEqualProveMacros[C <: whitebox.Context](val c: C){
   var DEBUG = false
 
   def equal[Tpe <: PhysType: c.WeakTypeTag, Expected <: PhysType: c.WeakTypeTag] = {
-    val powTpe = atomPowers[Tpe]
+    val powTpe = atomPowers[Tpe].filter(_._2 != 0)
     if(DEBUG) c.info(NoPosition, "="*20, true)
-    val powExpected = atomPowers[Expected]
+    val powExpected = atomPowers[Expected].filter(_._2 != 0)
 
-    def sameKeys = powTpe.keySet== powExpected.keySet
+    def sameKeys = powTpe.keySet == powExpected.keySet
     def keysAreEqual = {
       val v = powTpe.zipByKey(powExpected).values
       if(DEBUG) c.info(NoPosition, s"keysAreEqual: $v", true)
@@ -77,12 +77,13 @@ class PhysTypeEqualProveMacros[C <: whitebox.Context](val c: C){
         op.asType.name.decodedName.toString -> args match {
           case ("/",  l :: r :: Nil) => debuging("/", mergeMaps(rec(l, inverse), rec(r, !inverse))(_ + _))
           case ("**", l :: r :: Nil) => debuging("**", mergeMaps(rec(l, inverse), rec(r,  inverse))(_ + _))
-          case ("^",  t :: p :: Nil) =>
-            def const = if(inverse) -constantTypeToInt(p) else constantTypeToInt(p)
+          case (o@("^" | "^-"),  t :: p :: Nil) =>
+            def const = constantTypeToInt(p) * (if(inverse) -1 else 1) * (if(o == "^") 1 else -1)
             debuging("^",
               if(t <:< typeOf[PhysType.Unit]) Map(t.typeSymbol.name.decodedName.toString -> const)
               else rec(t, inverse).mapValues(_ * const)
             )
+
       }
       case atom if atom <:< typeOf[PhysType.Atom] =>
         debuging("atom", Map(atom.typeSymbol.name.decodedName.toString -> (if(inverse) -1 else 1)))
@@ -107,6 +108,7 @@ class PhysTypeEqualProveMacros[C <: whitebox.Context](val c: C){
   }.toMap
 
   def constantTypeToInt: Type => Int = {
+    case tpe if tpe <:< typeOf[PhysType.NegativeIntegerConstant[_]] => -constantTypeToInt(tpe.typeArgs.head)
     case tpe if tpe <:< typeOf[PhysType._1] => 1
     case tpe if tpe <:< typeOf[PhysType._2] => 2
     case tpe if tpe <:< typeOf[PhysType._3] => 3

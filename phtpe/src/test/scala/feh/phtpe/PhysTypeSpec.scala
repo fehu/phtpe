@@ -2,7 +2,6 @@ package feh.phtpe
 
 import org.specs2.Specification
 import feh.phtpe.short._
-import org.specs2.execute.Snippets
 
 class PhysTypeSpec extends Specification {
   def is = s2""" ${"PhysType Specification".name}
@@ -13,6 +12,8 @@ class PhysTypeSpec extends Specification {
     ${ PhysType.areEqual[kg**m/(s^_2), Newton] }
     ${ PhysType.areEqual[(kg**m/s)^_2, kg**m**N] }
     ${ PhysType.areEqual[(kg**m/s)^_2, kg**N] must beFalse }
+    ${ PhysType.areEqual[Newton/kg, m/(s^_2)] }
+    ${ PhysType.areEqual[s ^- _1, s ^ -[_1]] }
   """
 }
 
