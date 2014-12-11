@@ -1,6 +1,7 @@
 package feh.phtpe
 
 import scala.language.experimental.macros
+import scala.reflect.ClassTag
 
 sealed trait PhysType
 
@@ -56,4 +57,6 @@ object PhysType {
 }
 
 class PhysTypeEqualEvidence[L <: PhysType, R <: PhysType] protected[phtpe] ()
-class WeakPhysTypeEqualEvidence[L <: PhysType, R <: PhysType] protected[phtpe] (val equal: Boolean)
+class WeakPhysTypeEqualEvidence[L <: PhysType, R <: PhysType] protected[phtpe] (val equal: Boolean){
+  def asOption[Res](res: =>Res) = if(equal) Some(res) else None
+}

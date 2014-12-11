@@ -9,7 +9,7 @@ class PhysTypeSpec extends Specification {
     import feh.phtpe._
     import short._
 
-  __Equality Tests__
+  __Equality__
     ${ PhysType.areEqual[kg**m/(s^_2), Newton] }
     ${ PhysType.areEqual[(kg**m/s)^_2, kg**m**N] }
     ${ PhysType.areEqual[(kg**m/s)^_2, kg**N] must beFalse }
