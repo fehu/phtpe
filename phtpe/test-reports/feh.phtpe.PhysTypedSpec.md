@@ -15,6 +15,4 @@ import short._
     [+] 5.@@[(kg**m/s)^_2] phEq (10 / 2).@@[kg**N] must beFalse  
 ```
             
-| PhysTypedSpec |
-| Finished in 11 ms |
-| 5 examples, 0 failure, 0 error |
+| PhysTypedSpec | Finished in 11 ms | 5 examples, 0 failure, 0 error |
