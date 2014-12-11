@@ -16,6 +16,12 @@ import short._
     [+] 5.of[(kg**m/s)^_2] phEquals 5.of[kg**N] must beFalse
 ```
 
+[+] __Negation__
+```scala
+    [+] (-2).of[N] phEquals -2.of[N]
+    [+] -2.of[N] phEquals 2.of[N] must beFalse
+```  
+             
 [+] __Sum__
 ```scala
     [+] 1.of[N] + 2.of[N] phEquals 3.of[N]
@@ -31,9 +37,9 @@ import short._
     [+] 10.of[kg] - 5.of[kg] phEquals 5.of[kg]
     [+] 10.of[kg] - 2.of[kg]  phEquals 5.of[kg] must beFalse
     
-    [+] 1.of[kg] soft_- 2.of[kg] map (_ phEquals (-1).of[kg]) must beSome(true)
-    [+] 1.of[kg] soft_- 2.of[kg] map (_ phEquals (-1).of[N]) must beSome(false)
-    [+] 1.of[kg] soft_- 2.of[kg] map (_ phEquals   1.of[kg]) must beSome(false)
+    [+] 1.of[kg] soft_- 2.of[kg] map (_ phEquals -1.of[kg]) must beSome(true)
+    [+] 1.of[kg] soft_- 2.of[kg] map (_ phEquals -1.of[N]) must beSome(false)
+    [+] 1.of[kg] soft_- 2.of[kg] map (_ phEquals  1.of[kg]) must beSome(false)
     [+] 1.of[kg] soft_- 2.of[s] map (_ phEquals 3.of[kg]) must beNone
 ```
 
@@ -60,4 +66,11 @@ import short._
     [+] (7d.of[N] / 2d.of[kg]) phEquals 3.5.of[m/(s^_2)]     
 ```
             
-| PhysTypedSpec | Finished in 12 ms | 28 examples, 0 failure, 0 error |
+[+] __Power__
+```scala    
+    [+] 3.of[s] ^ _2 phEquals 9.of[s^_2]  (+)    
+    [+] 3.of[s] ^ _2 phEquals 9.of[s] must beFalse (+)    
+    [+] 3.of[s] ^ _2 phEquals 10.of[s^_2] must beFalse (+)  
+```                         
+            
+| PhysTypedSpec | Finished in 10 ms | 33 examples, 0 failure, 0 error |

@@ -39,16 +39,25 @@ object PhysType {
     object Alias extends Alias
   }
 
-  sealed trait IntegerConstant
+  sealed trait IntegerConstant{ def int: Int }
 
-  class _1 private() extends IntegerConstant
-  class _2 private() extends IntegerConstant
-  class _3 private() extends IntegerConstant
-  class _4 private() extends IntegerConstant
-  class _5 private() extends IntegerConstant
-  class _6 private() extends IntegerConstant
-  class _7 private() extends IntegerConstant
-  class _8 private() extends IntegerConstant
+  class _1 protected() extends IntegerConstant{ def int = 1 }
+  class _2 protected() extends IntegerConstant{ def int = 2 }
+  class _3 protected() extends IntegerConstant{ def int = 3 }
+  class _4 protected() extends IntegerConstant{ def int = 4 }
+  class _5 protected() extends IntegerConstant{ def int = 5 }
+  class _6 protected() extends IntegerConstant{ def int = 6 }
+  class _7 protected() extends IntegerConstant{ def int = 7 }
+  class _8 protected() extends IntegerConstant{ def int = 8 }
+
+  case object _1 extends _1
+  case object _2 extends _2
+  case object _3 extends _3
+  case object _4 extends _4
+  case object _5 extends _5
+  case object _6 extends _6
+  case object _7 extends _7
+  case object _8 extends _8
 
   trait NegativeIntegerConstant[Original <: IntegerConstant] extends IntegerConstant
 

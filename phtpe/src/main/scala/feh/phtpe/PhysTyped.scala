@@ -1,5 +1,7 @@
 package feh.phtpe
 
+import feh.phtpe.PhysType.IntegerConstant
+
 /** A physically typed value */
 case class PhysTyped[N: Numeric, Tpe <: PhysType](value: N)
 
@@ -28,6 +30,13 @@ object PhysTyped{
 
     def /[Tpe2 <: PhysType](tped2: PhysTyped[N, Tpe2]) = PhysTyped[N, Tpe / Tpe2](divide(tped.value, tped2.value))
     def /(const: N) = PhysTyped[N, Tpe](divide(tped.value, const))
+
+    def unary_- = PhysTyped[N, Tpe](num.negate(tped.value))
+
+    def pow[C <: IntegerConstant](const: C) = PhysTyped[N, Tpe ^ C](
+      (num.one /: (1 to const.int))((acc, _) => num.times(acc, tped.value))
+    )
+    def ^[C <: IntegerConstant](const: C) = pow(const)
 
     /** Soft equals */
     def phEquals[Tpe2 <: PhysType](tped2: PhysTyped[N, Tpe2])(implicit ev: WeakPhysTypeEqualEvidence[Tpe, Tpe2]): Boolean =

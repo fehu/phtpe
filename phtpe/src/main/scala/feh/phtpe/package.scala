@@ -13,6 +13,15 @@ package object phtpe extends PhysType.Composite.Alias with Units.SI.Alias{
   final type _7 = PhysType._7
   final type _8 = PhysType._8
 
+  final def _1 = PhysType._1
+  final def _2 = PhysType._2
+  final def _3 = PhysType._3
+  final def _4 = PhysType._4
+  final def _5 = PhysType._5
+  final def _6 = PhysType._6
+  final def _7 = PhysType._7
+  final def _8 = PhysType._8
+
   implicit def equalEvidence[L <: PhysType, R <: PhysType]: PhysTypeEqualEvidence[L, R] = macro PhysTypeEqualProves.evidence[L, R]
   implicit def weakEqualEvidence[L <: PhysType, R <: PhysType]: WeakPhysTypeEqualEvidence[L, R] = macro PhysTypeEqualProves.weakEvidence[L, R]
 }
