@@ -12,6 +12,4 @@ import short._
     [+] PhysType.areEqual[(kg**m/s)^_2, kg**N] must beFalse
 ```
     
-| PhysTypeSpec |
-| Finished in 10 ms |
-| 3 examples, 0 failure, 0 error |
+| PhysTypeSpec | Finished in 10 ms | 3 examples, 0 failure, 0 error |
