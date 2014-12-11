@@ -46,11 +46,11 @@ import short._
 [+] __Multiplication__
 ```scala
     [+] 2.of[N] * 3.of[s] phEquals 6.of[kg**m/s]
-    2.of[N] * 3.of[s] phEquals 6.of[kg**m] must beFalse (+)    
-    2.of[N] * 2.of[s] phEquals 6.of[kg**m/s] must beFalse (+)    
+    [+] 2.of[N] * 3.of[s] phEquals 6.of[kg**m] must beFalse
+    [+] 2.of[N] * 2.of[s] phEquals 6.of[kg**m/s] must beFalse
     
     [+] 2.of[N] * 3 phEquals 6.of[N]
-    3 x 2.of[N] phEquals 6.of[N]  (+)
+    [+] 3 x 2.of[N] phEquals 6.of[N]
 ```  
 
 [+] __Division__
@@ -68,9 +68,9 @@ import short._
             
 [+] __Power__
 ```scala    
-    [+] 3.of[s] ^ _2 phEquals 9.of[s^_2]  (+)    
-    [+] 3.of[s] ^ _2 phEquals 9.of[s] must beFalse (+)    
-    [+] 3.of[s] ^ _2 phEquals 10.of[s^_2] must beFalse (+)  
+    [+] 3.of[s] ^ _2 phEquals 9.of[s^_2] 
+    [+] 3.of[s] ^ _2 phEquals 9.of[s] must beFalse
+    [+] 3.of[s] ^ _2 phEquals 10.of[s^_2] must beFalse
 ```                         
             
 | PhysTypedSpec | Finished in 10 ms | 33 examples, 0 failure, 0 error |
