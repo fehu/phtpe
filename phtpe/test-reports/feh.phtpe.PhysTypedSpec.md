@@ -16,7 +16,5 @@ import short._
 ```
             
 | PhysTypedSpec |
-
 | Finished in 11 ms |
-
 | 5 examples, 0 failure, 0 error |
