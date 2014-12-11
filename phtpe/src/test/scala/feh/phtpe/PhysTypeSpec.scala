@@ -5,7 +5,6 @@ import Units.SI._
 import Units.SI.Alias._
 import PhysType.Composite.Alias._
 import PhysType._
-//import PhysTypesEqualEvidence._
 
 class PhysTypeSpec extends Specification{
   def is = s2""" ${"PhysType Specification".name}
