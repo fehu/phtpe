@@ -10,7 +10,7 @@ object PhysTypeEqualProves {
     val m = new PhysTypeEqualProveMacros[c.type](c)
     val (equal, powTpe, powExpected) = m.equal[Tpe, Expected]
 
-    if(!equal)c.abort(c.enclosingPosition, s"PhysType $powTpe is NOT equal to $powExpected")
+    if(!equal) c.abort(c.enclosingPosition, s"PhysType $powTpe is NOT equal to $powExpected")
     c.Expr(q"{}")
   }
 
@@ -21,6 +21,24 @@ object PhysTypeEqualProves {
     val (equal, _, _) = m.equal[Tpe, Expected]
 
     c.Expr(q"$equal")
+  }
+
+  def evidence[L <: PhysType: c.WeakTypeTag, R <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[PhysTypeEqualEvidence[L, R]] = {
+    val m = new PhysTypeEqualProveMacros[c.type](c)
+    val (equal, powTpe, powExpected) = m.equal[L, R]
+
+    if(!equal)c.abort(c.enclosingPosition, s"PhysType $powTpe is NOT equal to $powExpected")
+
+    import c.universe._
+    c.Expr(q"new PhysTypeEqualEvidence[${c.weakTypeOf[L]}, ${c.weakTypeOf[R]}]")
+  }
+
+  def weakEvidence[L <: PhysType: c.WeakTypeTag, R <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[WeakPhysTypeEqualEvidence[L, R]] = {
+    val m = new PhysTypeEqualProveMacros[c.type](c)
+    val (equal, _, _) = m.equal[L, R]
+
+    import c.universe._
+    c.Expr(q"new WeakPhysTypeEqualEvidence[${c.weakTypeOf[L]}, ${c.weakTypeOf[R]}]($equal)")
   }
 }
 

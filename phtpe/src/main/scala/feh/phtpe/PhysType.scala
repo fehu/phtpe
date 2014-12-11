@@ -50,4 +50,10 @@ object PhysType {
   def proveEqual[Tpe <: PhysType, Expected <: PhysType]: scala.Unit = macro PhysTypeEqualProves.atCompile[Tpe, Expected]
 
   def areEqual[Tpe <: PhysType, Expected <: PhysType]: Boolean = macro PhysTypeEqualProves.equal[Tpe, Expected]
+
+  implicit def equalEvidence[L <: PhysType, R <: PhysType]: PhysTypeEqualEvidence[L, R] = macro PhysTypeEqualProves.evidence[L, R]
+  implicit def weakEqualEvidence[L <: PhysType, R <: PhysType]: WeakPhysTypeEqualEvidence[L, R] = macro PhysTypeEqualProves.weakEvidence[L, R]
 }
+
+class PhysTypeEqualEvidence[L <: PhysType, R <: PhysType] protected[phtpe] ()
+class WeakPhysTypeEqualEvidence[L <: PhysType, R <: PhysType] protected[phtpe] (val equal: Boolean)
