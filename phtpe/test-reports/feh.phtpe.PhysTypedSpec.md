@@ -13,7 +13,7 @@ import short._
     [+] 5.of[N] phEquals 5.of[kg] must beFalse
     
     [+] 5.of[(kg**m/s)^_2] phEquals 5.of[kg**m**N]
-    5.of[(kg**m/s)^_2] phEquals 5.of[kg**N] must beFalse  (+)  
+    [+] 5.of[(kg**m/s)^_2] phEquals 5.of[kg**N] must beFalse
 ```
 
 [+] __Sum__
@@ -23,7 +23,7 @@ import short._
     
     [+] 1.of[N] soft_+ 2.of[N] map (_ phEquals 3.of[N]) must beSome(true)
     [+] 1.of[N] soft_+ 2.of[N] map (_ phEquals 10.of[N]) must beSome(false)
-    1.of[N] soft_+ 2.of[kg] map (_ phEquals 3.of[N]) must beNone  (+)  
+    [+] 1.of[N] soft_+ 2.of[kg] map (_ phEquals 3.of[N]) must beNone
 ```
 
 [+] __Subtraction__
@@ -34,7 +34,7 @@ import short._
     [+] 1.of[kg] soft_- 2.of[kg] map (_ phEquals (-1).of[kg]) must beSome(true)
     [+] 1.of[kg] soft_- 2.of[kg] map (_ phEquals (-1).of[N]) must beSome(false)
     [+] 1.of[kg] soft_- 2.of[kg] map (_ phEquals   1.of[kg]) must beSome(false)
-    1.of[kg] soft_- 2.of[s] map (_ phEquals 3.of[kg]) must beNone  (+)  
+    [+] 1.of[kg] soft_- 2.of[s] map (_ phEquals 3.of[kg]) must beNone
 ```
 
 [+] __Multiplication__
