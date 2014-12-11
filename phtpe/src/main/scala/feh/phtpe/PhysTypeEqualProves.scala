@@ -3,11 +3,11 @@ package feh.phtpe
 import scala.reflect.macros.whitebox
 import feh.util._
 
-object TypeEqualProves {
+object PhysTypeEqualProves {
   def atCompile[Tpe <: PhysType: c.WeakTypeTag, Expected <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[Unit] = {
     import c.universe._
 
-    val m = new TypeEqualConversionMacros[c.type](c)
+    val m = new PhysTypeEqualProveMacros[c.type](c)
     val (equal, powTpe, powExpected) = m.equal[Tpe, Expected]
 
     if(!equal)c.abort(c.enclosingPosition, s"PhysType $powTpe is NOT equal to $powExpected")
@@ -17,14 +17,14 @@ object TypeEqualProves {
   def equal[Tpe <: PhysType: c.WeakTypeTag, Expected <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[Boolean] = {
     import c.universe._
 
-    val m = new TypeEqualConversionMacros[c.type](c)
+    val m = new PhysTypeEqualProveMacros[c.type](c)
     val (equal, _, _) = m.equal[Tpe, Expected]
 
     c.Expr(q"$equal")
   }
 }
 
-class TypeEqualConversionMacros[C <: whitebox.Context](val c: C){
+class PhysTypeEqualProveMacros[C <: whitebox.Context](val c: C){
   import c.universe._
 
   var DEBUG = false
@@ -55,22 +55,23 @@ class TypeEqualConversionMacros[C <: whitebox.Context](val c: C){
     }
 
     def rec(tpe: Type, inverse: Boolean): Map[String, Int] = tpe match {
-      case TypeRef(a, op, args) if a <:< aliasTpe => op.asType.name.decodedName.toString -> args match {
-        case ("/",  l :: r :: Nil) => debuging("/", mergeMaps(rec(l, inverse), rec(r, !inverse))(_ + _))
-        case ("**", l :: r :: Nil) => debuging("**", mergeMaps(rec(l, inverse), rec(r,  inverse))(_ + _))
-        case ("^",  t :: p :: Nil) =>
-          def const = if(inverse) -constantTypeToInt(p) else constantTypeToInt(p)
-          debuging("^",
-            if(t <:< typeOf[PhysType.Unit]) Map(t.typeSymbol.name.decodedName.toString -> const)
-            else rec(t, inverse).mapValues(_ * const)
-          )
+      case TypeRef(a, op, args) if a <:< aliasTpe && !(op.typeSignature <:< typeOf[PhysType.Unit]) =>
+        op.asType.name.decodedName.toString -> args match {
+          case ("/",  l :: r :: Nil) => debuging("/", mergeMaps(rec(l, inverse), rec(r, !inverse))(_ + _))
+          case ("**", l :: r :: Nil) => debuging("**", mergeMaps(rec(l, inverse), rec(r,  inverse))(_ + _))
+          case ("^",  t :: p :: Nil) =>
+            def const = if(inverse) -constantTypeToInt(p) else constantTypeToInt(p)
+            debuging("^",
+              if(t <:< typeOf[PhysType.Unit]) Map(t.typeSymbol.name.decodedName.toString -> const)
+              else rec(t, inverse).mapValues(_ * const)
+            )
       }
       case atom if atom <:< typeOf[PhysType.Atom] =>
         debuging("atom", Map(atom.typeSymbol.name.decodedName.toString -> (if(inverse) -1 else 1)))
       case composite if composite <:< typeOf[PhysType.Unit] =>
         val declaration = composite.baseClasses.map(_.typeSignature)
           .collect {
-            case info@ClassInfoType(parents, _, _) if parents.contains(typeOf[feh.phtpe.PhysType.Unit]) => info
+            case info@ClassInfoType(parents, _, _) if parents.exists(_ <:< typeOf[feh.phtpe.PhysType.Unit]) => info
           }
           .ensuring(_.size == 1).head
           .parents.filter(_ <:< typeOf[PhysType.Composite])

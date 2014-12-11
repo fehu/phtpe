@@ -37,17 +37,17 @@ object PhysType {
 
   sealed trait IntegerConstant
 
-  final class _1 extends IntegerConstant
-  final class _2 extends IntegerConstant
-  final class _3 extends IntegerConstant
-  final class _4 extends IntegerConstant
-  final class _5 extends IntegerConstant
-  final class _6 extends IntegerConstant
-  final class _7 extends IntegerConstant
-  final class _8 extends IntegerConstant
+  class _1 private() extends IntegerConstant
+  class _2 private() extends IntegerConstant
+  class _3 private() extends IntegerConstant
+  class _4 private() extends IntegerConstant
+  class _5 private() extends IntegerConstant
+  class _6 private() extends IntegerConstant
+  class _7 private() extends IntegerConstant
+  class _8 private() extends IntegerConstant
 
   /** aborts on compile */
-  def proveEqual[Tpe <: PhysType, Expected <: PhysType]: scala.Unit = macro TypeEqualProves.atCompile[Tpe, Expected]
+  def proveEqual[Tpe <: PhysType, Expected <: PhysType]: scala.Unit = macro PhysTypeEqualProves.atCompile[Tpe, Expected]
 
-  def areEqual[Tpe <: PhysType, Expected <: PhysType]: Boolean = macro TypeEqualProves.equal[Tpe, Expected]
+  def areEqual[Tpe <: PhysType, Expected <: PhysType]: Boolean = macro PhysTypeEqualProves.equal[Tpe, Expected]
 }

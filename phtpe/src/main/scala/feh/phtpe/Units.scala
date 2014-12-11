@@ -1,19 +1,16 @@
 package feh.phtpe
 
 object Units{
-  import feh.phtpe.PhysType._
-  import feh.phtpe.PhysType.Composite.Alias._
-
   object SI{
-    final class Second extends Atom
-    final class Meter extends Atom
-    final class Kilogram extends Atom
+    class Second private() extends PhysType.Atom
+    class Meter private() extends PhysType.Atom
+    class Kilogram private() extends PhysType.Atom
 
-    import feh.phtpe.Units.SI.Alias._
+    import feh.phtpe.Units.SI.Short._
 
-    final class Newton extends (kg ** m / (s ^ _2)) with Unit
-
-    trait Alias{
+    class Newton private() extends (kg ** m / (s ^ _2)) with PhysType.Unit
+    
+    trait Short{
       final type s   = Second
       final type m   = Meter
       final type kg  = Kilogram
@@ -21,7 +18,17 @@ object Units{
       final type N   = Newton
     }
 
-    object Alias extends Alias
+    object Short extends Short
+
+    trait Alias{
+      lazy val short: Short = new Short {}
+
+      final type Second   = SI.Second
+      final type Meter    = SI.Meter
+      final type Kilogram = SI.Kilogram
+
+      final type Newton   = SI.Newton
+    }
   }
 }
 

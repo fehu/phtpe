@@ -1,5 +1,10 @@
 ## PhysTypeSpec
   
+```scala  
+    import feh.phtpe._
+    import short._
+```
+
 [+] __Equality Tests__ 
 ```scala 
     [+] areEqual[kg**m/(s^_2), Newton]
