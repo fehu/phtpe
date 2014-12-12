@@ -10,7 +10,7 @@ class PhysTypedSpec extends Specification {
   def is = s2""" ${"PhysTyped Specification".name}
 
   __Equality__
-    ${ 5.of[N] phEquals 5.of[Newton] }
+    ${ 5.@@[N] phEquals 5.of[Newton] }
     ${ 6.of[N] phEquals 5.of[Newton] must beFalse }
     ${ 5.of[N] phEquals 5.of[kg] must beFalse }
 

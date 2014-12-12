@@ -21,7 +21,7 @@ object Units{
     object Short extends Short
 
     trait Alias{
-      lazy val short: Short = new Short {}
+      lazy val short: Short = Short
 
       final type Second   = SI.Second
       final type Meter    = SI.Meter

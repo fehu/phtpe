@@ -6,10 +6,23 @@ import feh.phtpe.PhysType.IntegerConstant
 case class PhysTyped[N: Numeric, Tpe <: PhysType](value: N)
 
 object PhysTyped{
+//  type @@[N, Tpe <: PhysType] = PhysTyped[N, Tpe]
+  type |[N, Tpe <: PhysType] = PhysTyped[N, Tpe]
+
+  implicit def creation[N: Numeric, Tpe <: PhysType](v: N) = PhysTyped[N, Tpe](v)
+
   implicit class Creation[N: Numeric](v: N){
     def @@[Tpe <: PhysType] = PhysTyped[N, Tpe](v)
     def of[Tpe <: PhysType] = PhysTyped[N, Tpe](v)
   }
+
+  implicit def phTypedSafeCasting[N, Tpe <: PhysType, Expected <: PhysType]
+                                 (tped: PhysTyped[N, Tpe])
+                                 (implicit num: Numeric[N], ev: PhysTypeEqualEvidence[Tpe, Expected]): N|Expected =
+    tped.value.of[Expected]
+
+  implicit def phTypedNumeric[N2: Numeric, N1 <% N2: Numeric, Tpe <: PhysType](tped: N1|Tpe): N2|Tpe =
+    (tped.value: N2).of[Tpe]
 
   implicit class PhysTypedOps[N, Tpe <: PhysType](tped: PhysTyped[N, Tpe])(implicit num: Numeric[N])
   {
@@ -52,6 +65,10 @@ object PhysTyped{
     /** Soft subtraction */
     def soft_-[Tpe2 <: PhysType](tped2: PhysTyped[N, Tpe2])(implicit ev: WeakPhysTypeEqualEvidence[Tpe, Tpe2]): Option[PhysTyped[N, Tpe]] =
       ev.asOption(num.minus(tped.value, tped2.value).@@[Tpe])
+
+    def typeEqual[Tpe2 <: PhysType](implicit ev: WeakPhysTypeEqualEvidence[Tpe, Tpe2]) = ev.equal
+
+    def ensureType[Expected <: PhysType](implicit ev: PhysTypeEqualEvidence[Tpe, Expected]): N|Expected = tped.value.of[Expected]
   }
 
   implicit class NumericPhysTypedOps[N](const: N)(implicit num: Numeric[N]){
