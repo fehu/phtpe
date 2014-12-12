@@ -19,10 +19,10 @@ class MiscExamples extends Specification{ def is = s2""" ${ "PhysTyped Usage Exa
       }
     }
     val speedApproximator1 = new SpeedInAtmosphereApproximation(10.of[kg], _ * 0.01.of[kg/s])
-    val speedApproximator2 = new SpeedInAtmosphereApproximation(10d, _ * 1.of[kg/s]/100)
+    val speedApproximator2 = new SpeedInAtmosphereApproximation(10, _ / 100.of[s/kg])
 
     val in1Second1 = speedApproximator1.engineWorking(3e10.of[N], 1.of[Second])
-    val in1Second2 = speedApproximator2.engineWorking(3e10, 1d)
+    val in1Second2 = speedApproximator2.engineWorking(3e10, 1)
 
     in1Second1.typeEqual[m/s] and in1Second2.typeEqual[m/s] and in1Second1.phEquals(in1Second2)
   }

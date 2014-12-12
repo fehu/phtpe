@@ -9,7 +9,7 @@ object PhysTyped{
 //  type @@[N, Tpe <: PhysType] = PhysTyped[N, Tpe]
   type |[N, Tpe <: PhysType] = PhysTyped[N, Tpe]
 
-  implicit def creation[N: Numeric, Tpe <: PhysType](v: N) = PhysTyped[N, Tpe](v)
+  implicit def creation[N: Numeric, V <% N, Tpe <: PhysType](v: V) = PhysTyped[N, Tpe](v)
 
   implicit class Creation[N: Numeric](v: N){
     def @@[Tpe <: PhysType] = PhysTyped[N, Tpe](v)

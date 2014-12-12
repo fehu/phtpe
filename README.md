@@ -29,7 +29,7 @@ res1: feh.phtpe.PhysTyped[Int,feh.phtpe.short.kg] = PhysTyped(7)
 scala> var mass: Double|kg = _
 mass: feh.phtpe.PhysTyped.|[Double,feh.phtpe.short.kg] = null
 
-scala> mass = 12d
+scala> mass = 12
 mass: feh.phtpe.PhysTyped.|[Double,feh.phtpe.short.kg] = PhysTyped(12.0)
               
 scala> def force(acceleration: Double|(m/(s^_2))): Double|Newton = acceleration*mass

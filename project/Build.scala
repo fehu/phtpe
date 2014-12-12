@@ -7,7 +7,7 @@ import UnidocKeys._
 object  Build extends sbt.Build {
 
   val ScalaVersion = "2.11.4"
-  val Version = "0.2"
+  val Version = "0.3-SNAPSHOT"
 
   import Resolvers._
   import Dependencies._
