@@ -7,7 +7,7 @@ import UnidocKeys._
 object  Build extends sbt.Build {
 
   val ScalaVersion = "2.11.4"
-  val Version = "0.1"
+  val Version = "0.2"
 
   import Resolvers._
   import Dependencies._
@@ -123,7 +123,12 @@ object  Build extends sbt.Build {
 
   lazy val phtpe = Project("phtpe", file("phtpe"),
     settings = buildSettings ++ testSettings ++ Seq(
-      libraryDependencies ++= Seq(typesafe.config, scala.libAll)
+      libraryDependencies ++= Seq(typesafe.config, scala.libAll),
+      initialCommands +=
+        s"""import feh.phtpe._
+           |import PhysTyped._
+           |import short._
+         """.stripMargin
     )
   ) dependsOn feh.util //phtpeBase
 

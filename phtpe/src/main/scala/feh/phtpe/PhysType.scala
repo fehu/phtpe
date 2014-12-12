@@ -70,7 +70,7 @@ object PhysType {
   implicit def weakEqualEvidence[L <: PhysType, R <: PhysType]: WeakPhysTypeEqualEvidence[L, R] = macro PhysTypeEqualProves.weakEvidence[L, R]
 }
 
-class PhysTypeEqualEvidence[L <: PhysType, R <: PhysType] protected[phtpe] ()
-class WeakPhysTypeEqualEvidence[L <: PhysType, R <: PhysType] protected[phtpe] (val equal: Boolean){
+class PhysTypeEqualEvidence[L <: PhysType, R <: PhysType]
+class WeakPhysTypeEqualEvidence[L <: PhysType, R <: PhysType](val equal: Boolean){
   def asOption[Res](res: =>Res) = if(equal) Some(res) else None
 }

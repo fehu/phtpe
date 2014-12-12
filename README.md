@@ -1,9 +1,41 @@
 Physical Typing
 =====
-_under work_
+_still under work_
+
+```scala
+import feh.phtpe._
+import PhysTyped._
+import short._
+```
 
 |   |   |   |
 |:--|:--|:-:|
 |[PhysType](phtpe/src/main/scala/feh/phtpe/PhysType.scala)|A physical type|[specification](phtpe/test-reports/feh.phtpe.PhysTypeSpec.md) ([source](phtpe/src/test/scala/feh/phtpe/PhysTypeSpec.scala))|
 |[PhysTyped[Num, Tpe]](phtpe/src/main/scala/feh/phtpe/PhysTyped.scala)|A physicaly typed numeric value|[specification](phtpe/test-reports/feh.phtpe.PhysTypedSpec.md) ([source](phtpe/src/test/scala/feh/phtpe/PhysTypedSpec.scala))|
 | | Some Examples | [Examples](phtpe/test-reports/feh.phtpe.MiscExamples.md) |
+
+
+```scala
+scala> 3.of[kg] + 4.of[kg]
+res0: feh.phtpe.PhysTyped[Int,feh.phtpe.short.kg] = PhysTyped(7)
+
+scala> 3.of[kg] + 4.of[s]
+<console>:17: error: could not find implicit value for parameter ev: feh.phtpe.PhysTypeEqualEvidence[feh.phtpe.short.kg,feh.phtpe.short.s]
+              3.of[kg] + 4.of[s]
+              
+scala> var mass = 4d.of[kg]
+mass: feh.phtpe.PhysTyped[Double,feh.phtpe.short.kg] = PhysTyped(4.0)
+              
+scala> def force(acceleration: Double|(m/(s^_2))): Double|Newton = acceleration*mass
+force: (acceleration: feh.phtpe.PhysTyped.|[Double,feh.phtpe./[feh.phtpe.short.m,feh.phtpe.^[feh.phtpe.short.s,feh.phtpe._2]]])feh.phtpe.PhysTyped.|[Double,feh.phtpe.Newton]
+
+scala> force(12d)
+res3: feh.phtpe.PhysTyped.|[Double,feh.phtpe.Newton] = PhysTyped(48.0)
+
+scala> mass = 1d
+mass: feh.phtpe.PhysTyped[Double,feh.phtpe.short.kg] = PhysTyped(1.0)
+
+scala> force(12d)
+res4: feh.phtpe.PhysTyped.|[Double,feh.phtpe.Newton] = PhysTyped(12.0)
+
+```
