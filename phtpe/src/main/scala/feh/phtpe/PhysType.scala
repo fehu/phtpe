@@ -41,14 +41,14 @@ object PhysType {
 
   sealed trait IntegerConstant{ def int: Int }
 
-  class _1 protected() extends IntegerConstant{ def int = 1 }
-  class _2 protected() extends IntegerConstant{ def int = 2 }
-  class _3 protected() extends IntegerConstant{ def int = 3 }
-  class _4 protected() extends IntegerConstant{ def int = 4 }
-  class _5 protected() extends IntegerConstant{ def int = 5 }
-  class _6 protected() extends IntegerConstant{ def int = 6 }
-  class _7 protected() extends IntegerConstant{ def int = 7 }
-  class _8 protected() extends IntegerConstant{ def int = 8 }
+  class _1 protected() extends PositiveIntegerConstant{ def int = 1 }
+  class _2 protected() extends PositiveIntegerConstant{ def int = 2 }
+  class _3 protected() extends PositiveIntegerConstant{ def int = 3 }
+  class _4 protected() extends PositiveIntegerConstant{ def int = 4 }
+  class _5 protected() extends PositiveIntegerConstant{ def int = 5 }
+  class _6 protected() extends PositiveIntegerConstant{ def int = 6 }
+  class _7 protected() extends PositiveIntegerConstant{ def int = 7 }
+  class _8 protected() extends PositiveIntegerConstant{ def int = 8 }
 
   case object _1 extends _1
   case object _2 extends _2
@@ -59,7 +59,8 @@ object PhysType {
   case object _7 extends _7
   case object _8 extends _8
 
-  trait NegativeIntegerConstant[Original <: IntegerConstant] extends IntegerConstant
+  sealed trait PositiveIntegerConstant extends IntegerConstant
+  sealed trait NegativeIntegerConstant[Original <: IntegerConstant] extends IntegerConstant
 
   /** aborts on compile */
   def proveEqual[Tpe <: PhysType, Expected <: PhysType]: scala.Unit = macro PhysTypeEqualProves.atCompile[Tpe, Expected]

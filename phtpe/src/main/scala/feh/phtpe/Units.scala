@@ -31,7 +31,3 @@ object Units{
     }
   }
 }
-
-trait Measures{
-
-}
