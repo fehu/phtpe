@@ -3,15 +3,21 @@ package feh.phtpe
 import feh.phtpe.PhysType.IntegerConstant
 
 /** A physically typed value */
-case class PhysTyped[N: Numeric, Tpe <: PhysType](value: N)
+abstract class PhysTyped[N: Numeric, Tpe <: PhysType]{
+  val value: N
+}
 
-object PhysTyped{
-//  type @@[N, Tpe <: PhysType] = PhysTyped[N, Tpe]
-  type |[N, Tpe <: PhysType] = PhysTyped[N, Tpe]
+object PhysTyped extends PhysTypedImplicits
 
-  implicit def creation[N: Numeric, V <% N, Tpe <: PhysType](v: V) = PhysTyped[N, Tpe](v)
+trait PhysTypedImplicits{
+  final def apply[N: Numeric, Tpe <: PhysType](v: N): PhysTyped[N, Tpe] = new PhysTyped[N, Tpe]{ val value = v }
+  final def unapply[N: Numeric, Tpe <: PhysType](tped: PhysTyped[N, Tpe]): Option[N] = Some(tped.value)
 
-  implicit class Creation[N: Numeric](v: N){
+  final type |[N, Tpe <: PhysType] = PhysTyped[N, Tpe]
+
+  implicit final def creation[N: Numeric, V <% N, Tpe <: PhysType](v: V) = PhysTyped[N, Tpe](v)
+
+  implicit final class Creation[N: Numeric](v: N){
     def @@[Tpe <: PhysType] = PhysTyped[N, Tpe](v)
     def of[Tpe <: PhysType] = PhysTyped[N, Tpe](v)
   }
@@ -69,6 +75,8 @@ object PhysTyped{
     def typeEqual[Tpe2 <: PhysType](implicit ev: WeakPhysTypeEqualEvidence[Tpe, Tpe2]) = ev.equal
 
     def ensureType[Expected <: PhysType](implicit ev: PhysTypeEqualEvidence[Tpe, Expected]): N|Expected = tped.value.of[Expected]
+
+//    def castValue[To: Numeric]: To|Tpe = tped.value.asInstanceOf[To].of[Tpe]
   }
 
   implicit class NumericPhysTypedOps[N](const: N)(implicit num: Numeric[N]){
