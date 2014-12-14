@@ -8,10 +8,10 @@ trait VectorTypeEvidence[V <: AbstractVector]{
   type Num = V#Num
   type Dim = V#Dim
 
-  implicit val num: Numeric[Num]
+  val num: Numeric[Num]
   val dim: Dim
 
-  def toSeq(v: V): Seq[Num] //= productIterator.toSeq.asInstanceOf[Seq[Num]]
+  def toSeq(v: V): Seq[Num]
   def fromSeq: Seq[Num] => V
 }
 
@@ -24,9 +24,9 @@ object Vector{
   }
 
   trait VectorImplicits{
-    implicit def vectorTypeEvidence[V <: AbstractVector]: VectorTypeEvidence[V] = ???
-
     implicit def aVectorIsNumeric[V <: AbstractVector](implicit ev: VectorTypeEvidence[V]) = new AVectorIsNumeric[V]
+
+    implicit def vectorTypeEvidence[V <: AbstractVector]: VectorTypeEvidence[V] = macro VectorMacros.vectorTypeEvidence[V]
 
     implicit def tuple2IsVector[N: Numeric](t: (N, N)): Vector2D{ type Num = N } = ???
     implicit def tuple3IsVector[N: Numeric](t: (N, N, N)): Vector3D{ type Num = N } = ???
@@ -51,7 +51,11 @@ object Vector{
   trait VectorOpsImplicits {
     implicit class VectorOps[V <: AbstractVector](v: V)(implicit ev: VectorTypeEvidence[V], num: Numeric[V])
     {
-      def *(n: V#Num): V = ev.fromSeq(ev.toSeq(v) map (ev.num.times(_, n)))
+      def *(n: V#Num): V = {
+//        print("ev = " + ev)
+//        print("ev.num = " + ev.num)
+        ev.fromSeq(ev.toSeq(v) map (ev.num.times(_, n)))
+      }
     }
 
     implicit class FractionalVectorOps[V <: AbstractVector: Numeric](v: V)(implicit ev: VectorTypeEvidence[V], num: Fractional[V#Num])
@@ -59,8 +63,8 @@ object Vector{
       def abs: V#Num = sqrt( ev.toSeq(v).map(n => ev.num.times(n, n)).sum(ev.num) )
       def normalize: V = {
         val seq = ev.toSeq(v)
-        val sum = seq.sum(ev.num)
-        ev fromSeq seq.map(divide(_, sum))
+        val a = abs
+        ev fromSeq seq.map(divide(_, a))
       }
       def /(n: V#Num): V = ev fromSeq ev.toSeq(v).map(divide(_, n))
     }
@@ -74,11 +78,11 @@ object Vector{
     case fractional: Fractional[_]  => fractional.div(n1, n2)
   }
 
-  private def sqrt[Num: Fractional](n: Num): Num = (n match {
-    case d: Double  => math.sqrt(d)
-    case f: Float   => math.sqrt(f).toFloat
-  }).asInstanceOf[Num]
-  
+  private def sqrt[Num: Fractional](n: Num): Num = n match {
+    case d: Double  => math.sqrt(d).asInstanceOf[Num]
+    case f: Float   => math.sqrt(f).toFloat.asInstanceOf[Num]
+  }
+
   object Ops extends VectorCreation with VectorImplicits with VectorOpsImplicits
 }
 

@@ -11,9 +11,9 @@ class VectorsSpec extends Specification{ def is = s2""" ${ "Vectors Specificatio
     ${ ones[Long, _3]    mustEqual (1, 1, 1)}
 
   __Scalar Operations__
-    ${ ones[Int, _2]  * 10          mustEqual (10, 10) }
-    ${ ones[Float, _2]/ 2           mustEqual (.5, .5) }
-    ${ ones[Float, _2].abs          mustEqual 1 }
-    ${(ones[Float, _2]*5).normalize mustEqual (1, 1) }
+    ${ ones[Int, _2]  * 10              mustEqual (10, 10) }
+    ${ ones[Float, _2]/ 2               mustEqual (.5, .5) }
+    ${ ones[Float, _2].abs              mustEqual math.sqrt(2).toFloat }
+    ${ (ones[Float, _2]*5).normalize._1 mustEqual 1f/math.sqrt(2).toFloat }
   """
 }

@@ -125,14 +125,19 @@ object  Build extends sbt.Build {
       libraryDependencies ++= Seq(scala.libAll),
       initialCommands +=
         s"""import feh.phtpe._
-           |import PhysTyped._
            |import short._
          """.stripMargin
     )
   ) dependsOn feh.util//phtpeBase
 
   lazy val vectors = Project("vectors", file("vectors"),
-    settings = buildSettings ++ testSettings
+    settings = buildSettings ++ testSettings ++ Seq(
+      initialCommands +=
+        s"""import feh.phtpe._
+           |import short._
+           |import vectors._
+         """.stripMargin
+    )
   ) dependsOn phtpe
 
 }
