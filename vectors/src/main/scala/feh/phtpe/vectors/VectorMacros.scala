@@ -17,23 +17,14 @@ object VectorMacros {
     import c.universe._
 
     val V = weakTypeOf[V]
-
-//    val Dim = V.member(TypeName("Dim")).typeSignature //TypeRef(SingleType(SingleType(SingleType(ThisType(<root>), feh), feh.phtpe), feh.phtpe.package), TypeName("_2"), List())
-    val Num = V.member(TypeName("Num")).typeSignature //TypeRef(ThisType(scala), scala.Int, List())
-//    val it  = V.member(TermName("productIterator"))
+    val Num = V.member(TypeName("Num")).typeSignature
 
     def seqExpr(count: Int) = for(i <- 0 until count) yield c.Expr[V#Num](q"seq($i)")
+
     val (dim, fromSeq) = V.member(TypeName("Dim")).typeSignature match {
       case tpe if tpe <:< typeOf[_2] => q"feh.phtpe._2" ->
-        q"""{
-          (seq: Seq[$Num]) =>
-            val x = ${create[V#Num, V#Dim](c)(Num, typeOf[_2], seqExpr(2))}
-//            sys.error("x = " + x)
-            x
-          }
-        """
+        q"(seq: Seq[$Num]) => ${create[V#Num, V#Dim](c)(Num, typeOf[_2], seqExpr(2))}"
     }
-//    c.abort(NoPosition, "num = " + showRaw(Num))
 
     val ev = q"""
       new VectorTypeEvidence[$V] {
@@ -44,24 +35,12 @@ object VectorMacros {
         def fromSeq: (Seq[Num]) => $V = $fromSeq
       }
     """
-    //$it.toSeq.asInstanceOf[Seq[Num]]
-    //
-
-//    c.abort(NoPosition, showRaw(ev))
-
-
-//    RefinedType(
-//      List(
-//        TypeRef(ThisType(scala), scala.Tuple2, List(TypeRef(ThisType(scala), scala.Int, List()), TypeRef(ThisType(scala), scala.Int, List()))),
-//        TypeRef(ThisType(feh.phtpe.vectors), feh.phtpe.vectors.Vector2D, List())
-//      ), Scope(TypeName("Num"))
-//    )
     c.Expr[VectorTypeEvidence[V]](ev)
   }
 
-  private def fromProduct[N: c.WeakTypeTag, D <: PositiveIntegerConstant: c.WeakTypeTag](c: whitebox.Context)(fill: => c.Expr[Numeric[N] => N]) = {
-
-  }
+//  private def fromProduct[N: c.WeakTypeTag, D <: PositiveIntegerConstant: c.WeakTypeTag](c: whitebox.Context)(fill: => c.Expr[Numeric[N] => N]) = {
+//
+//  }
 
   private def empty[N: c.WeakTypeTag, D <: PositiveIntegerConstant: c.WeakTypeTag](c: whitebox.Context)(fill: => c.Expr[Numeric[N] => N]) = {
     import c.universe._
@@ -79,12 +58,9 @@ object VectorMacros {
 
     create[N, D](c)(N, D, f)
   }
-//[N: c.WeakTypeTag, D <: PositiveIntegerConstant: c.WeakTypeTag]
+
   private def create[N, D <: PositiveIntegerConstant](c: whitebox.Context)(N: c.Type, D: c.Type, fill: Seq[c.Expr[N]]) = {
     import c.universe._
-
-//    val N = c.weakTypeOf[N]
-//    val D = c.weakTypeOf[D]
 
     val numTree = q"implicitly[Numeric[$N]]"
 

@@ -51,11 +51,7 @@ object Vector{
   trait VectorOpsImplicits {
     implicit class VectorOps[V <: AbstractVector](v: V)(implicit ev: VectorTypeEvidence[V], num: Numeric[V])
     {
-      def *(n: V#Num): V = {
-//        print("ev = " + ev)
-//        print("ev.num = " + ev.num)
-        ev.fromSeq(ev.toSeq(v) map (ev.num.times(_, n)))
-      }
+      def *(n: V#Num): V = ev.fromSeq(ev.toSeq(v) map (ev.num.times(_, n)))
     }
 
     implicit class FractionalVectorOps[V <: AbstractVector: Numeric](v: V)(implicit ev: VectorTypeEvidence[V], num: Fractional[V#Num])

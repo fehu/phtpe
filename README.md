@@ -4,8 +4,8 @@ _still under work_
 
 ```scala
 import feh.phtpe._
-import PhysTyped._
 import short._
+import vectors._ // "feh.phtpe" %% "vectors" needed
 ```
 
 |   |   |   |

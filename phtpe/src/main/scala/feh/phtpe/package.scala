@@ -1,7 +1,6 @@
 package feh
 
 import feh.phtpe.PhysType.PositiveIntegerConstant
-
 import scala.language.experimental.macros
 import scala.reflect._
 
@@ -46,8 +45,4 @@ package object phtpe extends PhysType.Composite.Alias with Units.SI.Alias with P
 
     type Vector[V <: AbstractVector, Tpe <: PhysType] = Measure[V, Tpe]
   }
-
-//  implicit def VectorPhysTypeIsMeasure[Num, V <: AbstractVector, Tpe <: PhysType](tped: V|Tpe): Measure.Vector[Num, V, Tpe] =
-//    tped.asInstanceOf[]
-
 }

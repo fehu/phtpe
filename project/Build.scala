@@ -93,10 +93,6 @@ object  Build extends sbt.Build {
 
     object feh{
       lazy val util = ProjectRef( uri("git://github.com/fehu/util.git"), "util")
-
-//      object utils{
-//        lazy val compiler = ProjectRef( uri("git://github.com/fehu/util.git"), "scala-compiler-utils")
-//      }
     }
 
     object js{
@@ -128,7 +124,7 @@ object  Build extends sbt.Build {
            |import short._
          """.stripMargin
     )
-  ) dependsOn feh.util//phtpeBase
+  ) dependsOn feh.util
 
   lazy val vectors = Project("vectors", file("vectors"),
     settings = buildSettings ++ testSettings ++ Seq(
