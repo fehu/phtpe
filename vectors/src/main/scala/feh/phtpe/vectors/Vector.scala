@@ -20,13 +20,16 @@ object Vector{
   trait VectorCreation{
     /** N must be numeric */
     def zeros[N, D <: PositiveIntegerConstant]: AbstractVector{ type Dim = D; type Num = N } = macro VectorMacros.zeros[N, D]
-    def ones[N: Numeric, D <: PositiveIntegerConstant]: AbstractVector{ type Dim = D; type Num = N } = ???
+    def ones [N, D <: PositiveIntegerConstant]: AbstractVector{ type Dim = D; type Num = N } = macro VectorMacros.ones[N, D]
   }
 
   trait VectorImplicits{
     implicit def vectorTypeEvidence[V <: AbstractVector]: VectorTypeEvidence[V] = ???
 
     implicit def aVectorIsNumeric[V <: AbstractVector](implicit ev: VectorTypeEvidence[V]) = new AVectorIsNumeric[V]
+
+    implicit def tuple2IsVector[N: Numeric](t: (N, N)): Vector2D{ type Num = N } = ???
+    implicit def tuple3IsVector[N: Numeric](t: (N, N, N)): Vector3D{ type Num = N } = ???
   }
 
   class AVectorIsNumeric[V <: AbstractVector](implicit ev: VectorTypeEvidence[V]) extends Numeric[V] {
@@ -45,32 +48,24 @@ object Vector{
     def toInt(x: V) = invalid("toInt")
   }
 
-  trait VectorMeasureImplicits{
-
-    implicit class VectorMeasureOps[V <: AbstractVector, Tpe <: PhysType](v: Measure.Vector[V, Tpe])
-                                                                         (implicit ev: VectorTypeEvidence[V], num: Numeric[V])
+  trait VectorOpsImplicits {
+    implicit class VectorOps[V <: AbstractVector](v: V)(implicit ev: VectorTypeEvidence[V], num: Numeric[V])
     {
-      def *(n: V#Num): V|Tpe = ev.fromSeq(ev.toSeq(v.value) map (ev.num.times(_, n))).of[Tpe]
-      def *[Tpe2 <: PhysType](n: V#Num|Tpe2): V|(Tpe**Tpe2) = ev.fromSeq(ev.toSeq(v.value) map (ev.num.times(_, n.value))) //.of[Tpe**Tpe2]
+      def *(n: V#Num): V = ev.fromSeq(ev.toSeq(v) map (ev.num.times(_, n)))
     }
 
-//    implicit class DoubleVectorMeasureOps[V <: AbstractVector{ type Num = Double }](v: V)(implicit ev: VectorTypeEvidence[V]){
-//      def abs(): V#Num = ev.toSeq(v).map(math.pow(_, 2)).sum |> math.sqrt
-//    }
-
-    implicit class FractionalVectorMeasureOps[V <: AbstractVector: Numeric, Tpe <: PhysType](v: Measure.Vector[V, Tpe])
-                                                                                   (implicit ev: VectorTypeEvidence[V], num: Fractional[V#Num])
+    implicit class FractionalVectorOps[V <: AbstractVector: Numeric](v: V)(implicit ev: VectorTypeEvidence[V], num: Fractional[V#Num])
     {
-      def abs(): V#Num|Tpe = sqrt( ev.toSeq(v.value).map(n => ev.num.times(n, n)).sum(ev.num) )
-      def normalize(): V|Tpe  = {
-        val seq = ev.toSeq(v.value)
+      def abs: V#Num = sqrt( ev.toSeq(v).map(n => ev.num.times(n, n)).sum(ev.num) )
+      def normalize: V = {
+        val seq = ev.toSeq(v)
         val sum = seq.sum(ev.num)
         ev fromSeq seq.map(divide(_, sum))
       }
-      def /(n: V#Num): V|Tpe = ev fromSeq ev.toSeq(v.value).map(divide(_, n))
-      def /[Tpe2 <: PhysType](n: V#Num|Tpe2): V|(Tpe/Tpe2) = ev fromSeq ev.toSeq(v.value).map(divide(_, n.value))
+      def /(n: V#Num): V = ev fromSeq ev.toSeq(v).map(divide(_, n))
     }
   }
+
 
   private def invalid(op: String) = sys.error(s"operation '$op' is not supported for vectors")
 
@@ -84,7 +79,7 @@ object Vector{
     case f: Float   => math.sqrt(f).toFloat
   }).asInstanceOf[Num]
   
-  object Ops extends VectorCreation with VectorImplicits with VectorMeasureImplicits
+  object Ops extends VectorCreation with VectorImplicits with VectorOpsImplicits
 }
 
 trait Vector2D extends AbstractVector{

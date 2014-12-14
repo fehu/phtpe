@@ -132,11 +132,7 @@ object  Build extends sbt.Build {
   ) dependsOn feh.util//phtpeBase
 
   lazy val vectors = Project("vectors", file("vectors"),
-    settings = buildSettings
+    settings = buildSettings ++ testSettings
   ) dependsOn phtpe
-  //  lazy val phtpeBase = Project("phtpe-base", file("phtpe-base"),
-//    settings = buildSettings ++ Seq(
-//      libraryDependencies ++= Seq(scala.libAll)
-//    )
-//  ) dependsOn feh.util
+
 }
