@@ -1,7 +1,5 @@
 package feh.phtpe
 
-import scala.reflect.ClassTag
-
 object Measures{
   type Mass[Num] = Measure.Scalar[Num, _]
   type Time[Num] = Measure.Scalar[Num, _]
@@ -22,12 +20,4 @@ object Measures{
     type Acceleration[Num, V <: AbstractVector] = Measure.Vector[V, m/(s^_2)] with Measures.Acceleration[Num, V]
     type Force[Num, V <: AbstractVector]        = Measure.Vector[V, N] with Measures.Force[Num, V]
   }
-}
-
-trait MeasuresImplicits{
-  implicit class VectorImplicits[V <: AbstractVector: ClassTag, Tpe <: PhysType](val v: Measure.Vector[V, Tpe]){
-    def abs = PhysTyped[V#Num, Tpe](v.value.abs)(v.value.num.asInstanceOf[Numeric[V#Num]])
-  }
-
-
 }

@@ -8,5 +8,5 @@ trait AbstractVector{
 
   def num: Numeric[Num]
 
-  def abs: Num
+//  def abs: Num
 }

@@ -5,7 +5,7 @@ import feh.phtpe.PhysType.PositiveIntegerConstant
 import scala.language.experimental.macros
 import scala.reflect._
 
-package object phtpe extends PhysType.Composite.Alias with Units.SI.Alias with PhysTypedImplicits with MeasuresImplicits{
+package object phtpe extends PhysType.Composite.Alias with Units.SI.Alias with PhysTypedImplicits{
 
   final type _1 = PhysType._1
   final type _2 = PhysType._2

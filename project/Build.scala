@@ -1,16 +1,14 @@
-import sbt._
-import Keys._
-import sbtunidoc.Plugin._
 import org.sbtidea.SbtIdeaPlugin._
-import UnidocKeys._
+import sbt.Keys._
+import sbt._
+import sbtunidoc.Plugin._
 
 object  Build extends sbt.Build {
 
   val ScalaVersion = "2.11.4"
   val Version = "0.3-SNAPSHOT"
 
-  import Resolvers._
-  import Dependencies._
+  import Build.Dependencies._
 
   val buildSettings = Defaults.coreDefaultSettings ++ Seq (
     organization  := "feh.phtpe",
@@ -119,20 +117,24 @@ object  Build extends sbt.Build {
     )
   ).settings(ideaExcludeFolders := ".idea" :: ".idea_modules" :: Nil)
    .aggregate(GitDependencies: _*)
-   .aggregate(phtpe)
+   .aggregate(phtpe, vectors)
 
   lazy val phtpe = Project("phtpe", file("phtpe"),
     settings = buildSettings ++ testSettings ++ Seq(
-      libraryDependencies ++= Seq(typesafe.config, scala.libAll),
+      name := "typing",
+      libraryDependencies ++= Seq(scala.libAll),
       initialCommands +=
         s"""import feh.phtpe._
            |import PhysTyped._
            |import short._
          """.stripMargin
     )
-  ) dependsOn feh.util //phtpeBase
+  ) dependsOn feh.util//phtpeBase
 
-//  lazy val phtpeBase = Project("phtpe-base", file("phtpe-base"),
+  lazy val vectors = Project("vectors", file("vectors"),
+    settings = buildSettings
+  ) dependsOn phtpe
+  //  lazy val phtpeBase = Project("phtpe-base", file("phtpe-base"),
 //    settings = buildSettings ++ Seq(
 //      libraryDependencies ++= Seq(scala.libAll)
 //    )
