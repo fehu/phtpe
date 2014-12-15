@@ -20,23 +20,21 @@ import vectors._ // "feh.phtpe" %% "vectors" needed
 
 ```scala
 scala> 3.of[kg] + 4.of[kg]
-res0: feh.phtpe.PhysTyped[Int,feh.phtpe.short.kg] = PhysTyped(7)
+res0: feh.phtpe.PhysTyped[Int,feh.phtpe.short.kg] = 7|[Kilogram: 1]
 
 scala> 3.of[kg] + 4.of[s]
 <console>:17: error: could not find implicit value for parameter ev: feh.phtpe.PhysTypeEqualEvidence[feh.phtpe.short.kg,feh.phtpe.short.s]
               3.of[kg] + 4.of[s]
+                       ^
 
 scala> 3.of[kg] + 4.of[N/m**(s^_2)]
-res1: feh.phtpe.PhysTyped[Int,feh.phtpe.short.kg] = PhysTyped(7)
-              
-scala> var mass: Double|kg = _
-mass: feh.phtpe.PhysTyped.|[Double,feh.phtpe.short.kg] = null
+res2: feh.phtpe.PhysTyped[Int,feh.phtpe.short.kg] = 7|[Kilogram: 1]
 
-scala> mass = 12
-mass: feh.phtpe.PhysTyped.|[Double,feh.phtpe.short.kg] = PhysTyped(12.0)
+scala> 6.of[m] / 2.of[m] + 1
+res0: feh.phtpe.PhysTyped[Int,feh.phtpe./[feh.phtpe.short.m,feh.phtpe.short.m]] = 4|[Neutral: 0]
               
-scala> def force(acceleration: Double|(m/(s^_2))): Double|Newton = acceleration*mass
-force: (acceleration: feh.phtpe.PhysTyped.|[Double,feh.phtpe./[feh.phtpe.short.m,feh.phtpe.^[feh.phtpe.short.s,feh.phtpe._2]]])feh.phtpe.PhysTyped.|[Double,feh.phtpe.Newton]
+scala> val mass: Double|kg = 12
+mass: feh.phtpe.|[Double,feh.phtpe.short.kg] = 12.0|[Kilogram: 1]
 
 scala> (3, 3, 2).vector[m/s] * 4.of[s] - (1, 1, 0).vector[m]*4 =@= ones[Int, _3].of[m]*8
 res5: Boolean = true

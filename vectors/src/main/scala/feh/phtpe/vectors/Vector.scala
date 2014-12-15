@@ -33,10 +33,10 @@ object Vector{
     implicit def vectorTypeEvidence[V <: AbstractVector]: VectorTypeEvidence[V] = macro VectorMacros.vectorTypeEvidence[V]
 
     implicit def tuple2IsVector[N: Numeric](t: (N, N)): Vector2D{ type Num = N } =
-      new Tuple2(t._1, t._2) with Vector2D { type Num = N }
+      new Product2[N, N] with Vector2D { type Num = N; def _1 = t._1; def _2 = t._2 }
 
     implicit def tuple3IsVector[N: Numeric](t: Tuple3[N, N, N]): Vector3D{ type Num = N } =
-      new Tuple3(t._1, t._2, t._3) with Vector3D { type Num = N }
+      new Product3[N, N, N] with Vector3D { type Num = N; def _1 = t._1; def _2 = t._2; def _3 = t._3 }
   }
 
   class VectorIsNumeric[V <: AbstractVector](implicit ev: VectorTypeEvidence[V]) extends Numeric[V] {
@@ -77,7 +77,7 @@ object Vector{
 //      def toInt[V2 <: AbstractVector{ type Dim = V#Dim; type Num = Int}]: V2 = invalid("toInt")
     }
 
-    implicit class FractionalVectorOps[V <: AbstractVector: Numeric](v: V)(implicit ev: VectorTypeEvidence[V], num: Fractional[V#Num]){
+    implicit class FractionalVectorOps[V <: AbstractVector/*: Numeric*/](v: V)(implicit ev: VectorTypeEvidence[V], num: Fractional[V#Num]){
       def abs: V#Num = sqrt( ev.toSeq(v).map(n => ev.num.times(n, n)).sum(ev.num) )
       def normalize: V = {
         val seq = ev.toSeq(v)
@@ -123,11 +123,26 @@ trait Vector2D extends AbstractVector{
   self: Product2[_, _] =>
 
   type Dim = _2
+  override def toString = s"Vector2D(${_1}, ${_2})"
+
+  def canEqual(that: Any): Boolean = that.isInstanceOf[Product2[_, _]]
+
+  override def equals(that: Any) = canEqual(that) && PartialFunction.cond(that){
+    case v: Product2[_, _] => self._1 == v._1 && self._2 == v._2
+  }
 }
 
 trait Vector3D extends AbstractVector{
   self: Product3[_, _, _] =>
 
   type Dim = _3
+  override def toString = s"Vector3D(${_1}, ${_2}, ${_3})"
+
+  def canEqual(that: Any): Boolean = that.isInstanceOf[Product3[_, _, _]]
+
+  override def equals(that: Any) = canEqual(that) && PartialFunction.cond(that){
+    case v: Product3[_, _, _] => self._1 == v._1 && self._2 == v._2 && self._3 == v._3
+  }
+
 }
 

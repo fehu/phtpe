@@ -1,9 +1,7 @@
 package feh.phtpe
 
-import org.specs2.Specification
-
-import feh.phtpe.PhysTyped._
 import feh.phtpe.short._
+import org.specs2.Specification
 
 class PhysTypedSpec extends Specification {
 
@@ -56,6 +54,7 @@ class PhysTypedSpec extends Specification {
     ${ (7.of[N] / 2.of[kg]) phEquals 3.of[m/(s^_2)] }
     ${ (7d.of[N] / 2d.of[kg]) phEquals 3d.of[m/(s^_2)] must beFalse }
     ${ (7d.of[N] / 2d.of[kg]) phEquals 3.5.of[m/(s^_2)] }
+    ${ (7d.of[kg] / 2d.of[kg]) phEquals 3.5 }
 
   __Power__
     ${ 3.of[s] ^ _2 phEquals 9.of[s^_2] }

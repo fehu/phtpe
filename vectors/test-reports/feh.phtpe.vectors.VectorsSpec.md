@@ -38,4 +38,4 @@
   
 ```
 
-| Vectors Specification | Finished in 11 ms | 20 examples, 0 failure, 0 error |
+| Vectors Specification | Finished in 13 ms | 20 examples, 0 failure, 0 error |

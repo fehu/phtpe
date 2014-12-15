@@ -1,7 +1,6 @@
 package feh.phtpe
 
 import scala.language.experimental.macros
-import scala.reflect.ClassTag
 
 sealed trait PhysType
 
@@ -13,6 +12,9 @@ object PhysType {
 
   trait Atom extends PhysType with Unit
   sealed trait Composite extends PhysType
+
+  sealed trait Neutral extends Atom
+  case object Neutral extends Neutral
 
   object Composite{
     trait Unary[P <: PhysType] extends Composite
@@ -63,14 +65,17 @@ object PhysType {
   sealed trait NegativeIntegerConstant[Original <: IntegerConstant] extends IntegerConstant
 
   /** aborts on compile */
-  def proveEqual[Tpe <: PhysType, Expected <: PhysType]: scala.Unit = macro PhysTypeEqualProves.atCompile[Tpe, Expected]
+  def proveEqual[Tpe <: PhysType, Expected <: PhysType]: scala.Unit = macro PhysTypeMacros.Equal.atCompile[Tpe, Expected]
 
-  def areEqual[Tpe <: PhysType, Expected <: PhysType]: Boolean = macro PhysTypeEqualProves.equal[Tpe, Expected]
+  def areEqual[Tpe <: PhysType, Expected <: PhysType]: Boolean = macro PhysTypeMacros.equal[Tpe, Expected]
 
-  implicit def equalEvidence[L <: PhysType, R <: PhysType]: PhysTypeEqualEvidence[L, R] = macro PhysTypeEqualProves.evidence[L, R]
-  implicit def weakEqualEvidence[L <: PhysType, R <: PhysType]: WeakPhysTypeEqualEvidence[L, R] = macro PhysTypeEqualProves.weakEvidence[L, R]
+  implicit def equalEvidence[L <: PhysType, R <: PhysType]: PhysTypeEqualEvidence[L, R] = macro PhysTypeMacros.Equal.evidence[L, R]
+  implicit def weakEqualEvidence[L <: PhysType, R <: PhysType]: WeakPhysTypeEqualEvidence[L, R] = macro PhysTypeMacros.Equal.weakEvidence[L, R]
+
+  implicit def decomposition[T <: PhysType]: PhysTypeStringDecomposition[T] = macro PhysTypeMacros.decomposition[T]
 }
 
+class PhysTypeStringDecomposition[T <: PhysType](val decomposition: Map[String, Int])
 class PhysTypeEqualEvidence[L <: PhysType, R <: PhysType]
 class WeakPhysTypeEqualEvidence[L <: PhysType, R <: PhysType](val equal: Boolean){
   def asOption[Res](res: =>Res) = if(equal) Some(res) else None

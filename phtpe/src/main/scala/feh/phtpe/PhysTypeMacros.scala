@@ -1,56 +1,67 @@
 package feh.phtpe
 
-import scala.reflect.macros.whitebox
 import feh.util._
 
-object PhysTypeEqualProves {
-  def atCompile[Tpe <: PhysType: c.WeakTypeTag, Expected <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[Unit] = {
-    import c.universe._
+import scala.reflect.macros.whitebox
 
-    val m = new PhysTypeEqualProveMacros[c.type](c)
-    val (equal, powTpe, powExpected) = m.equal[Tpe, Expected]
+object PhysTypeMacros {
+  object Equal{
+    def atCompile[Tpe <: PhysType: c.WeakTypeTag, Expected <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[Unit] = {
+      import c.universe._
 
-    if(!equal) c.abort(c.enclosingPosition, s"PhysType $powTpe is NOT equal to $powExpected")
-    c.Expr(q"{}")
+      val m = new PhysTypeMacros[c.type](c)
+      val (equal, powTpe, powExpected) = m.equal[Tpe, Expected]
+
+      if(!equal) c.abort(c.enclosingPosition, s"PhysType $powTpe is NOT equal to $powExpected")
+      c.Expr(q"{}")
+    }
+    
+    def evidence[L <: PhysType: c.WeakTypeTag, R <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[PhysTypeEqualEvidence[L, R]] = {
+      val m = new PhysTypeMacros[c.type](c)
+      val (equal, powTpe, powExpected) = m.equal[L, R]
+
+      if(!equal)c.abort(c.enclosingPosition, s"PhysType $powTpe is NOT equal to $powExpected")
+
+      import c.universe._
+      c.Expr(q"new PhysTypeEqualEvidence[${c.weakTypeOf[L]}, ${c.weakTypeOf[R]}]")
+    }
+
+    def weakEvidence[L <: PhysType: c.WeakTypeTag, R <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[WeakPhysTypeEqualEvidence[L, R]] = {
+      val m = new PhysTypeMacros[c.type](c)
+      val (equal, _, _) = m.equal[L, R]
+
+      import c.universe._
+      c.Expr(q"new WeakPhysTypeEqualEvidence[${c.weakTypeOf[L]}, ${c.weakTypeOf[R]}]($equal)")
+    } 
   }
 
   def equal[Tpe <: PhysType: c.WeakTypeTag, Expected <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[Boolean] = {
     import c.universe._
 
-    val m = new PhysTypeEqualProveMacros[c.type](c)
+    val m = new PhysTypeMacros[c.type](c)
     val (equal, _, _) = m.equal[Tpe, Expected]
 
     c.Expr(q"$equal")
   }
 
-  def evidence[L <: PhysType: c.WeakTypeTag, R <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[PhysTypeEqualEvidence[L, R]] = {
-    val m = new PhysTypeEqualProveMacros[c.type](c)
-    val (equal, powTpe, powExpected) = m.equal[L, R]
-
-    if(!equal)c.abort(c.enclosingPosition, s"PhysType $powTpe is NOT equal to $powExpected")
-
+  def decomposition[T <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[PhysTypeStringDecomposition[T]] = {
     import c.universe._
-    c.Expr(q"new PhysTypeEqualEvidence[${c.weakTypeOf[L]}, ${c.weakTypeOf[R]}]")
-  }
 
-  def weakEvidence[L <: PhysType: c.WeakTypeTag, R <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[WeakPhysTypeEqualEvidence[L, R]] = {
-    val m = new PhysTypeEqualProveMacros[c.type](c)
-    val (equal, _, _) = m.equal[L, R]
-
-    import c.universe._
-    c.Expr(q"new WeakPhysTypeEqualEvidence[${c.weakTypeOf[L]}, ${c.weakTypeOf[R]}]($equal)")
+    val m = new PhysTypeMacros[c.type](c)
+    val entries = m.atomPowers[T].map{ case (name, count) => q"$name -> $count" }.toList
+    c.Expr[PhysTypeStringDecomposition[T]](q"new PhysTypeStringDecomposition[${weakTypeOf[T]}](Map(..$entries))")
   }
 }
 
-class PhysTypeEqualProveMacros[C <: whitebox.Context](val c: C){
+class PhysTypeMacros[C <: whitebox.Context](val c: C){
   import c.universe._
 
   var DEBUG = false
 
   def equal[Tpe <: PhysType: c.WeakTypeTag, Expected <: PhysType: c.WeakTypeTag] = {
-    val powTpe = atomPowers[Tpe].filter(_._2 != 0)
+    val powTpe = atomPowers[Tpe]
     if(DEBUG) c.info(NoPosition, "="*20, true)
-    val powExpected = atomPowers[Expected].filter(_._2 != 0)
+    val powExpected = atomPowers[Expected]
 
     def sameKeys = powTpe.keySet == powExpected.keySet
     def keysAreEqual = {
@@ -85,6 +96,7 @@ class PhysTypeEqualProveMacros[C <: whitebox.Context](val c: C){
             )
 
       }
+      case atom if atom <:< typeOf[PhysType.Neutral] => Map()
       case atom if atom <:< typeOf[PhysType.Atom] =>
         debuging("atom", Map(atom.typeSymbol.name.decodedName.toString -> (if(inverse) -1 else 1)))
       case composite if composite <:< typeOf[PhysType.Unit] =>
@@ -99,7 +111,12 @@ class PhysTypeEqualProveMacros[C <: whitebox.Context](val c: C){
         debuging("composite", rec(declaration, inverse))
     }
 
-    rec(Tpe.tpe, false)
+    val res = rec(Tpe.tpe, false).filter(_._2 != 0) match {
+      case map if map.isEmpty => Map("Neutral" -> 0)
+      case map => map
+    }
+
+    debuging("res", res)
   }
 
   def mergeMaps[K, V](mp: Map[K, V], mp2: Map[K, V])(f: (V, V) => V): Map[K, V] = (mp.keySet ++ mp2.keySet).map{

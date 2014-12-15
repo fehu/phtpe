@@ -68,10 +68,19 @@ object VectorMacros {
     val numTree = q"implicitly[Numeric[$N]]"
 
     def buildVector = D match {
-      case tpe if tpe <:< typeOf[PhysType._2] => q"""new Tuple2(${fill(0)}, ${fill(1)})
-        with feh.phtpe.vectors.Vector2D{ type Num = $N }"""
-      case tpe if tpe <:< typeOf[PhysType._3] => q"""new Tuple3(${fill(0)}, ${fill(1)}, ${fill(2)})
-        with feh.phtpe.vectors.Vector3D{ type Num = $N }"""
+      case tpe if tpe <:< typeOf[PhysType._2] => q"""new Product2[$N, $N] with feh.phtpe.vectors.Vector2D{
+                                                        final type Num = $N
+                                                        final def _1 = ${fill(0)}
+                                                        final def _2 = ${fill(1)}
+                                                      }
+                                                 """
+      case tpe if tpe <:< typeOf[PhysType._3] => q"""new Product3[$N, $N, $N] with feh.phtpe.vectors.Vector3D{
+                                                        final type Num = $N
+                                                        final def _1 = ${fill(0)}
+                                                        final def _2 = ${fill(1)}
+                                                        final def _3 = ${fill(2)}
+                                                      }
+                                                 """
     }
 
     c.Expr[AbstractVector{ type Dim = D; type Num = N } ]( buildVector )

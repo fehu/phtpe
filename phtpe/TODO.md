@@ -1,3 +1,3 @@
-- [ ] add dimensionless physical type
-- [ ] better print formatting
-- [ ] attend deprecation warnings
+- [x] add dimensionless physical type
+- [x] better print formatting
+- [x] attend deprecation warnings
