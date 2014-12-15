@@ -25,7 +25,8 @@ object  Build extends sbt.Build {
 
   lazy val testSettings = TestSettings.get ++ Seq(
     TestSettings.copyTestReportsDir <<= baseDirectory(base => Some(base / "test-reports")),
-    TestSettings.autoAddReportsToGit := true
+    TestSettings.autoAddReportsToGit := true,
+    resolvers += Resolvers.Release.scalaz
   )
 
   // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
@@ -34,6 +35,7 @@ object  Build extends sbt.Build {
     object Release{
       lazy val sonatype = "Sonatype Releases" at "http://oss.sonatype.org/content/repositories/releases"
       lazy val spray = "spray" at "http://repo.spray.io/"
+      lazy val scalaz = "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
     }
 
     object Snapshot{
@@ -49,8 +51,6 @@ object  Build extends sbt.Build {
     lazy val akka = "com.typesafe.akka" %% "akka-actor" % AkkaVersion
     lazy val akkaSlf4j = "com.typesafe.akka" %% "akka-slf4j" % AkkaVersion
     lazy val slf4j = "org.slf4j" % "slf4j-log4j12" % "1.7.7"
-
-    lazy val shapeless = "com.chuusai" % "shapeless_2.10.2" % "2.0.0-M1"
 
     object scala{
       lazy val compiler = "org.scala-lang" % "scala-compiler" % ScalaVersion
@@ -74,22 +74,9 @@ object  Build extends sbt.Build {
     }
 
     object Tests{
-      lazy val scalaCheck = "org.scalacheck" %% "scalacheck" % "1.10.1" % "test"
-      lazy val specs2 = "org.specs2" %% "specs2" % "2.4.2" % "test"
+//      lazy val scalaCheck = "org.scalacheck" %% "scalacheck" % "1.10.1" % "test"
+      lazy val specs2 = "org.specs2" %% "specs2" % "2.4.15" % "test"
     }
-
-    object jung{
-      lazy val JungVersion = "2.0.1"
-
-      lazy val jung2 = "net.sf.jung" % "jung2" % JungVersion
-      lazy val api = "net.sf.jung" % "jung-api" % JungVersion
-      lazy val graph = "net.sf.jung" % "jung-graph-impl" % JungVersion
-      lazy val visualization = "net.sf.jung" % "jung-visualization" % JungVersion
-      lazy val algorithms = "net.sf.jung" % "jung-algorithms" % JungVersion
-
-      def all = jung2 :: api :: graph :: visualization :: algorithms :: Nil
-    }
-
 
     object feh{
       lazy val util = ProjectRef( uri("git://github.com/fehu/util.git"), "util")

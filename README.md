@@ -15,6 +15,7 @@ import vectors._ // "feh.phtpe" %% "vectors" needed
 | | Some Examples | [Examples](phtpe/test-reports/feh.phtpe.MiscExamples.md) |
 |[AbstractVector](phtpe/src/main/scala/feh/phtpe/AbstractVector.scala)| Abstract Vector, supporting physical typing | |
 |[Vector](vectors/src/main/scala/feh/phtpe/vectors/Vector.scala)| Vectors Implementation | [specification](vectors/test-reports/feh.phtpe.vectors.VectorsSpec.md) ([source](vectors/src/test/scala/feh/phtpe/vectors/VectorsSpec.scala))|
+|[VectorMeasures](vectors/src/main/scala/feh/phtpe/vectors/VectorMeasures.scala)| PhysTyped Vector wrappers | [specification](vectors/test-reports/feh.phtpe.vectors.VectorMeasuresSpec.md) ([source](vectors/src/test/scala/feh/phtpe/vectors/VectorMeasuresSpec.scala))| 
 
 
 ```scala

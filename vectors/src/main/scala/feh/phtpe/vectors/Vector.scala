@@ -21,15 +21,22 @@ object Vector{
     /** N must be numeric */
     def zeros[N, D <: PositiveIntegerConstant]: AbstractVector{ type Dim = D; type Num = N } = macro VectorMacros.zeros[N, D]
     def ones [N, D <: PositiveIntegerConstant]: AbstractVector{ type Dim = D; type Num = N } = macro VectorMacros.ones[N, D]
+
+    implicit final class VectorFromTupleCreation[T <: Product, V <: AbstractVector](t: T)(implicit isVector: T => V){
+      def vec: V = t
+    }
   }
 
   trait VectorImplicits{
-    implicit def aVectorIsNumeric[V <: AbstractVector](implicit ev: VectorTypeEvidence[V]) = new AVectorIsNumeric[V]
+    implicit def vectorIsNumeric[V <: AbstractVector](implicit ev: VectorTypeEvidence[V]) = new AVectorIsNumeric[V]
 
     implicit def vectorTypeEvidence[V <: AbstractVector]: VectorTypeEvidence[V] = macro VectorMacros.vectorTypeEvidence[V]
 
-    implicit def tuple2IsVector[N: Numeric](t: (N, N)): Vector2D{ type Num = N } = ???
-    implicit def tuple3IsVector[N: Numeric](t: (N, N, N)): Vector3D{ type Num = N } = ???
+    implicit def tuple2IsVector[N: Numeric](t: (N, N)): Vector2D{ type Num = N } =
+      new Tuple2(t._1, t._2) with Vector2D { type Num = N }
+
+    implicit def tuple3IsVector[N: Numeric](t: Tuple3[N, N, N]): Vector3D{ type Num = N } =
+      new Tuple3(t._1, t._2, t._3) with Vector3D { type Num = N }
   }
 
   class AVectorIsNumeric[V <: AbstractVector](implicit ev: VectorTypeEvidence[V]) extends Numeric[V] {

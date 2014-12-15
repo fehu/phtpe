@@ -21,9 +21,12 @@ object VectorMacros {
 
     def seqExpr(count: Int) = for(i <- 0 until count) yield c.Expr[V#Num](q"seq($i)")
 
+    def genFromSeq(n: Int, t: c.Type) =
+      q"(seq: Seq[$Num]) => ${create[V#Num, V#Dim](c)(Num, t, seqExpr(n))}"
+
     val (dim, fromSeq) = V.member(TypeName("Dim")).typeSignature match {
-      case tpe if tpe <:< typeOf[_2] => q"feh.phtpe._2" ->
-        q"(seq: Seq[$Num]) => ${create[V#Num, V#Dim](c)(Num, typeOf[_2], seqExpr(2))}"
+      case tpe if tpe <:< typeOf[_2] => q"feh.phtpe._2" -> genFromSeq(2, tpe)
+      case tpe if tpe <:< typeOf[_3] => q"feh.phtpe._3" -> genFromSeq(3, tpe)
     }
 
     val ev = q"""
@@ -31,7 +34,7 @@ object VectorMacros {
         val dim: Dim = $dim
         val num: Numeric[Num] = implicitly[Numeric[$Num]]
 
-        def toSeq(v: $V): Seq[Num] = v.productIterator.toList.asInstanceOf[Seq[Num]]
+        def toSeq(v: $V): Seq[Num] = v.asInstanceOf[Product].productIterator.toList.asInstanceOf[Seq[Num]]
         def fromSeq: (Seq[Num]) => $V = $fromSeq
       }
     """
@@ -64,15 +67,13 @@ object VectorMacros {
 
     val numTree = q"implicitly[Numeric[$N]]"
 
-    def buildVector(body: c.Tree) = D match {
+    def buildVector = D match {
       case tpe if tpe <:< typeOf[PhysType._2] => q"""new Tuple2(${fill(0)}, ${fill(1)})
-        with feh.phtpe.vectors.Vector2D{ type Num = $N; $body }"""
+        with feh.phtpe.vectors.Vector2D{ type Num = $N }"""
       case tpe if tpe <:< typeOf[PhysType._3] => q"""new Tuple3(${fill(0)}, ${fill(1)}, ${fill(2)})
-        with feh.phtpe.vectors.Vector3D{ type Num = $N; $body }"""
+        with feh.phtpe.vectors.Vector3D{ type Num = $N }"""
     }
 
-    c.Expr[AbstractVector{ type Dim = D; type Num = N } ](
-      buildVector{ q"def num: Numeric[Num] = $numTree" }
-    )
+    c.Expr[AbstractVector{ type Dim = D; type Num = N } ]( buildVector )
   }
 }

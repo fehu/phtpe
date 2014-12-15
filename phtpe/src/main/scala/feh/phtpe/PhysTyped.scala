@@ -17,7 +17,7 @@ trait PhysTypedImplicits{
 
   implicit final def creation[N: Numeric, V <% N, Tpe <: PhysType](v: V) = PhysTyped[N, Tpe](v)
 
-  implicit final class Creation[N: Numeric](v: N){
+  implicit final class PhysTypeCreation[N: Numeric](v: N){
     def @@[Tpe <: PhysType] = PhysTyped[N, Tpe](v)
     def of[Tpe <: PhysType] = PhysTyped[N, Tpe](v)
   }
@@ -58,11 +58,8 @@ trait PhysTypedImplicits{
     def ^[C <: IntegerConstant](const: C) = pow(const)
 
     /** Soft equals */
-    def phEquals[Tpe2 <: PhysType](tped2: PhysTyped[N, Tpe2])(implicit ev: WeakPhysTypeEqualEvidence[Tpe, Tpe2]): Boolean =
+    def phEquals[N2: Numeric, Tpe2 <: PhysType](tped2: PhysTyped[N2, Tpe2])(implicit ev: WeakPhysTypeEqualEvidence[Tpe, Tpe2]): Boolean =
       ev.equal && tped.value == tped2.value
-
-    /** Soft equals */
-    def ===[Tpe2 <: PhysType](tped2: PhysTyped[N, Tpe2])(implicit ev: WeakPhysTypeEqualEvidence[Tpe, Tpe2]) = phEquals[Tpe2](tped2)
 
     /** Soft sum */
     def soft_+[Tpe2 <: PhysType](tped2: PhysTyped[N, Tpe2])(implicit ev: WeakPhysTypeEqualEvidence[Tpe, Tpe2]): Option[PhysTyped[N, Tpe]] =
@@ -81,7 +78,7 @@ trait PhysTypedImplicits{
 
   implicit class NumericPhysTypedOps[N](const: N)(implicit num: Numeric[N]){
     def **[Tpe <: PhysType](tped: PhysTyped[N, Tpe]) = PhysTyped[N, Tpe](num.times(const, tped.value))
-    def x[Tpe <: PhysType](tped: PhysTyped[N, Tpe]) = **[Tpe](tped)
+//    def x[Tpe <: PhysType](tped: PhysTyped[N, Tpe]) = **[Tpe](tped)
 
     def div[Tpe <: PhysType](tped: PhysTyped[N, Tpe]) = PhysTyped[N, Tpe^ -[_1]](divide(const, tped.value))
     def \[Tpe <: PhysType](tped: PhysTyped[N, Tpe]) = div(tped)

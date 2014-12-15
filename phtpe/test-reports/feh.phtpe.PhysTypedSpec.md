@@ -50,7 +50,7 @@ import short._
     [+] 2.of[N] * 2.of[s] phEquals 6.of[kg**m/s] must beFalse
     
     [+] 2.of[N] * 3 phEquals 6.of[N]
-    [+] 3 x 2.of[N] phEquals 6.of[N]
+    [+] 3 ** 2.of[N] phEquals 6.of[N]
 ```  
 
 [+] __Division__
