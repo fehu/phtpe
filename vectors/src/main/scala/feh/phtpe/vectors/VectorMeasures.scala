@@ -16,8 +16,17 @@ trait VectorMeasureOpsImplicits extends VectorOpsImplicits{
   implicit class VectorMeasureOps[V <: AbstractVector, Tpe <: PhysType](v: Measure.Vector[V, Tpe])
                                                                        (implicit ev: VectorTypeEvidence[V])
   {
+    private implicit def num = ev.num
+
     def *(n: V#Num): V|Tpe = new VectorOps(v.value) * n
     def *[Tpe2 <: PhysType](n: V#Num|Tpe2): V|(Tpe**Tpe2) = v.value * n.value
+
+    /** by-elem */
+    def **[Tpe2 <: PhysType](n: V|Tpe2): V|(Tpe**Tpe2) = v.value ** n.value
+
+    /** dot product */
+    def `.`[Tpe2 <: PhysType](n: V|Tpe2): V#Num|(Tpe**Tpe2) = (v.value `.` n.value)
+    def dot[Tpe2 <: PhysType](n: V|Tpe2): V#Num|(Tpe**Tpe2) = `.`(n)
   }
 
   implicit class FractionalVectorMeasureOps[V <: AbstractVector, Tpe <: PhysType](v: Measure.Vector[V, Tpe])
@@ -41,7 +50,7 @@ trait VectorMeasureOpsImplicits extends VectorOpsImplicits{
     def y = _2
   }
 
-  implicit class Vector4DMeasureOps[V <: Vector3D, Tpe <: PhysType](v: Measure.Vector[V, Tpe])
+  implicit class Vector3DMeasureOps[V <: Vector3D, Tpe <: PhysType](v: Measure.Vector[V, Tpe])
                                                                    (implicit ev: VectorTypeEvidence[V])
   {
     private implicit def num = ev.num.asInstanceOf[Numeric[V#Num]]
@@ -53,5 +62,8 @@ trait VectorMeasureOpsImplicits extends VectorOpsImplicits{
     def x = _1
     def y = _2
     def z = _3
+
+    /** vector product */
+    def X[Tpe2 <: PhysType](n: V|Tpe2): V|(Tpe**Tpe2) = v.value X n.value
   }
 }

@@ -28,7 +28,7 @@ object Vector{
   }
 
   trait VectorImplicits{
-    implicit def vectorIsNumeric[V <: AbstractVector](implicit ev: VectorTypeEvidence[V]) = new AVectorIsNumeric[V]
+    implicit def vectorIsNumeric[V <: AbstractVector](implicit ev: VectorTypeEvidence[V]) = new VectorIsNumeric[V]
 
     implicit def vectorTypeEvidence[V <: AbstractVector]: VectorTypeEvidence[V] = macro VectorMacros.vectorTypeEvidence[V]
 
@@ -39,7 +39,7 @@ object Vector{
       new Tuple3(t._1, t._2, t._3) with Vector3D { type Num = N }
   }
 
-  class AVectorIsNumeric[V <: AbstractVector](implicit ev: VectorTypeEvidence[V]) extends Numeric[V] {
+  class VectorIsNumeric[V <: AbstractVector](implicit ev: VectorTypeEvidence[V]) extends Numeric[V] {
     private def num = ev.num
 
     def negate(x: V) = ev.fromSeq(ev.toSeq(x).map(num.negate))
@@ -58,11 +58,26 @@ object Vector{
   trait VectorOpsImplicits {
     implicit class VectorOps[V <: AbstractVector](v: V)(implicit ev: VectorTypeEvidence[V], num: Numeric[V])
     {
+      def unary_- = num.negate(v)
+      def +(v2: V) = num.plus(v, v2)
+      def -(v2: V) = num.minus(v, v2)
+
       def *(n: V#Num): V = ev.fromSeq(ev.toSeq(v) map (ev.num.times(_, n)))
+
+      /** by-elem product */
+      def **(v2: V): V = num.times(v, v2)
+
+      /** dot product */
+      def `.`(v2: V): V#Num = ev.toSeq(**(v2)).sum(ev.num)
+      def dot(v2: V): V#Num = `.`(v2)
+
+//      def toDouble[V2 <: AbstractVector{ type Dim = V#Dim; type Num = Double}]: V2 = invalid("toDouble")
+//      def toFloat[V2 <: AbstractVector{ type Dim = V#Dim; type Num = Float}]: V2 = invalid("toFloat")
+//      def toLong[V2 <: AbstractVector{ type Dim = V#Dim; type Num = Long}]: V2 = invalid("toLong")
+//      def toInt[V2 <: AbstractVector{ type Dim = V#Dim; type Num = Int}]: V2 = invalid("toInt")
     }
 
-    implicit class FractionalVectorOps[V <: AbstractVector: Numeric](v: V)(implicit ev: VectorTypeEvidence[V], num: Fractional[V#Num])
-    {
+    implicit class FractionalVectorOps[V <: AbstractVector: Numeric](v: V)(implicit ev: VectorTypeEvidence[V], num: Fractional[V#Num]){
       def abs: V#Num = sqrt( ev.toSeq(v).map(n => ev.num.times(n, n)).sum(ev.num) )
       def normalize: V = {
         val seq = ev.toSeq(v)
@@ -70,6 +85,21 @@ object Vector{
         ev fromSeq seq.map(divide(_, a))
       }
       def /(n: V#Num): V = ev fromSeq ev.toSeq(v).map(divide(_, n))
+    }
+
+    implicit class Vector3DOps[V <: Vector3D](v: V)(implicit ev: VectorTypeEvidence[V]){
+      private lazy val vv = v.asInstanceOf[Product3[V#Num, V#Num, V#Num]]
+
+      import ev.num.mkNumericOps
+      /** vector product */
+      def X(v2: V): V = {
+        val vv2 = v2.asInstanceOf[Product3[V#Num, V#Num, V#Num]]
+        ev.fromSeq(Seq(
+          vv._2*vv2._3 - vv._3*vv2._2,
+          vv._3*vv2._1 - vv._1*vv2._3,
+          vv._1*vv2._2 - vv._2*vv2._1
+        ))
+      }
     }
   }
 
