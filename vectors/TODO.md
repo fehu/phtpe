@@ -1,1 +1,1 @@
--[ ] some vector operations do not work with different underlying numerics;
+- [ ] some vector operations do not work with different underlying numerics;

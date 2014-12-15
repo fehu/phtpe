@@ -41,6 +41,17 @@ force: (acceleration: feh.phtpe.PhysTyped.|[Double,feh.phtpe./[feh.phtpe.short.m
 scala> (3, 3, 2).vector[m/s] * 4.of[s] - (1, 1, 0).vector[m]*4 =@= ones[Int, _3].of[m]*8
 res5: Boolean = true
 
+scala> (3, 3, 2).vector[m/s] * 4.of[s] - (1, 1, 0).vector[m]*4 =@= (1, 2, 3).vector[m]
+res8: Boolean = false
+
+scala> (3, 3, 2).vector[m/s] * 4.of[s] - (1, 1, 0).vector[m]*4 =@= (1, 2, 3).vector[kg]
+<console>:17: error: could not find implicit value for parameter ev: feh.phtpe.PhysTypeEqualEvidence[feh.phtpe.**[feh.phtpe./[feh.phtpe.short.m,feh.phtpe.short.s],feh.phtpe.short.s],feh.phtpe.short.kg]
+              (3, 3, 2).vector[m/s] * 4.of[s] - (1, 1, 0).vector[m]*4 =@= (1, 2, 3).vector[kg]
+
+scala> (3, 3, 2).vector[m/s] * 4.of[s] - (1, 1, 0).vector[m/s]*4 =@= (1, 2, 3).vector[m/s]
+<console>:17: error: could not find implicit value for parameter ev: feh.phtpe.PhysTypeEqualEvidence[feh.phtpe.**[feh.phtpe./[feh.phtpe.short.m,feh.phtpe.short.s],feh.phtpe.short.s],feh.phtpe./[feh.phtpe.short.m,feh.phtpe.short.s]]
+              (3, 3, 2).vector[m/s] * 4.of[s] - (1, 1, 0).vector[m/s]*4 =@= (1, 2, 3).vector[m/s]
+
 ```
 
 |   |   |   |
