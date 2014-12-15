@@ -38,4 +38,11 @@ mass: feh.phtpe.PhysTyped.|[Double,feh.phtpe.short.kg] = PhysTyped(12.0)
 scala> def force(acceleration: Double|(m/(s^_2))): Double|Newton = acceleration*mass
 force: (acceleration: feh.phtpe.PhysTyped.|[Double,feh.phtpe./[feh.phtpe.short.m,feh.phtpe.^[feh.phtpe.short.s,feh.phtpe._2]]])feh.phtpe.PhysTyped.|[Double,feh.phtpe.Newton]
 
+scala> (3, 3, 2).vector[m/s] * 4.of[s] - (1, 1, 0).vector[m]*4 =@= ones[Int, _3].of[m]*8
+res5: Boolean = true
+
 ```
+
+|   |   |   |
+|:--|:-:|:-:|
+|**TODO**:| [typing](phtpe/TODO.md) | [vectors](vectors/TODO.md) |
