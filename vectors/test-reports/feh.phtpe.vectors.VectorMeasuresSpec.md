@@ -14,6 +14,12 @@
 	[+] (zeros[Float, _2].of[N/m]._2 =@= 1.of[kg/(s^_2)]) must beFalse  
 ```
 
+[+] __Numeric Transforms__
+```scala
+	[+] ones[Int, _2].of[kg].to[Float] / 10   phEquals ones[Float, _2].of[kg] / 10  
+	[+] ( (ones[Float, _2].of[s] / 10).to[Int]  phEquals ones[Float, _2].of[s] / 10 ) must beFalse  
+```
+
 [+] __Scalar Operations__
 ```scala
 	[+] ones[Int, _3].of[m/s] * 10.of[s]          phEquals (10, 10, 10).vector[m]  
@@ -35,4 +41,4 @@
    
 ```
 
-| Vector Measures Specification | Finished in 13 ms | 18 examples, 20 expectations, 0 failure, 0 error |
+| Vector Measures Specification | Finished in 13 ms | 20 examples, 22 expectations, 0 failure, 0 error |

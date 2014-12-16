@@ -17,6 +17,10 @@ class VectorMeasuresSpec extends Specification {
     ${ zeros[Float, _3].of[N/m]*5 |> {v => (v.x =@= v.y) and (v.y =@= v.z) and (v.z =@= 0.of[kg/(s^_2)]) } }
     ${ (zeros[Float, _2].of[N/m]._2 =@= 1.of[kg/(s^_2)]) must beFalse }
 
+  __Numeric Transforms__
+    ${ ones[Int, _2].of[kg].to[Float] / 10   phEquals ones[Float, _2].of[kg] / 10 }
+    ${ ( (ones[Float, _2].of[s] / 10).to[Int]  phEquals ones[Float, _2].of[s] / 10 ) must beFalse }
+
   __Scalar Operations__
     ${ ones[Int, _3].of[m/s] * 10.of[s]          phEquals (10, 10, 10).vector[m] }
     ${ ones[Float, _2].of[m] / 2.of[s]           phEquals (.5, .5).vector[m/s] }

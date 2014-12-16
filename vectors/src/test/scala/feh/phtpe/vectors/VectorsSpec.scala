@@ -9,11 +9,15 @@ class VectorsSpec extends Specification{ def is = s2""" ${ "Vectors Specificatio
     ${ zeros[Int, _2]    mustEqual (0, 0)}
     ${ zeros[Double, _3] mustEqual (0, 0, 0)}
     ${ ones[Float, _2]   mustEqual (1, 1)}
-    ${ ones[Long, _3]    mustEqual (1, 1, 1)}
+    ${ ones[BigInt, _3]  mustEqual (1, 1, 1)}
 
   __Elements__
     ${ ones[Long, _3]    |> {v => v._1 === 1 and v._2 === 1 and v._3 === 1} }
     ${ zeros[Double, _2] |> {v => v._1 === 0 and v._2 === 0} }
+
+  __Numeric Transforms__
+    ${ ones[Int, _2].to[Float] / 10   mustEqual    ones[Float, _2] / 10 }
+    ${ (ones[Float, _2] / 10).to[Int] mustNotEqual ones[Float, _2] / 10 }
 
   __Scalar Operations__
     ${ ones[Int, _2]  * 10              mustEqual (10, 10) }
@@ -32,6 +36,6 @@ class VectorsSpec extends Specification{ def is = s2""" ${ "Vectors Specificatio
     ${ (1, 2, 3).vec X (3, 2, 1).vec    mustEqual (-4, 8, -4) }
     ${ (1, 2, 3).vec X -(1, 2, 3).vec   mustEqual zeros[Int, _3] }
 
-    ${ ((2d, 3d).vec ** (3, 2).vec.to[Double](implicitly, vectorNumTransform)) ** (1d/6, 1d/6).vec mustEqual (1, 1) } // todo: different underlying type multiplication
+    ${ (2d, 3d).vec ** (3, 2).vec.to ** (1d/6, 1d/6).vec mustEqual (1, 1) }
   """
 }

@@ -1,7 +1,7 @@
 package feh.phtpe.vectors
 
 import feh.phtpe._
-import feh.phtpe.vectors.Vector.VectorOpsImplicits
+import feh.phtpe.vectors.Vector.{VectorNumTransform, VectorTransformImplicits, VectorOpsImplicits}
 
 trait VectorMeasureOpsImplicits extends VectorOpsImplicits{
 
@@ -67,5 +67,14 @@ trait VectorMeasureOpsImplicits extends VectorOpsImplicits{
 
     /** vector product */
     def X[Tpe2 <: PhysType](n: V|Tpe2)(implicit ev: PhysTypeStringDecomposition[Tpe**Tpe2]): V|(Tpe**Tpe2) = v.value X n.value
+  }
+}
+
+
+trait VectorMeasuresTransformsImplicits extends VectorTransformImplicits{
+  implicit class VectorMeasureTransform[V <: AbstractVector, Tpe <: PhysType](v: V|Tpe)(implicit ev: VectorTypeEvidence[V]){
+    def to[N: Numeric](implicit transform: VectorNumTransform[V, N],
+                       vNum: Numeric[AbstractVector{ type Dim = V#Dim; type Num = N }],
+                       d: PhysTypeStringDecomposition[Tpe]): AbstractVector{ type Dim = V#Dim; type Num = N }|Tpe = v.value.to[N]
   }
 }
