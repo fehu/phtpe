@@ -65,19 +65,14 @@ object Vector{
       def *(n: V#Num): V = ev.fromSeq(ev.toSeq(v) map (ev.num.times(_, n)))
 
       /** by-elem product */
-      def **(v2: V): V = num.times(v, v2)
+      def **(v2: AbstractVector{ type Dim = V#Dim; type Num = V#Num }): V = num.times(v, v2.asInstanceOf[V])
 
       /** dot product */
-      def `.`(v2: V): V#Num = ev.toSeq(**(v2)).sum(ev.num)
-      def dot(v2: V): V#Num = `.`(v2)
-
-//      def toDouble[V2 <: AbstractVector{ type Dim = V#Dim; type Num = Double}]: V2 = invalid("toDouble")
-//      def toFloat[V2 <: AbstractVector{ type Dim = V#Dim; type Num = Float}]: V2 = invalid("toFloat")
-//      def toLong[V2 <: AbstractVector{ type Dim = V#Dim; type Num = Long}]: V2 = invalid("toLong")
-//      def toInt[V2 <: AbstractVector{ type Dim = V#Dim; type Num = Int}]: V2 = invalid("toInt")
+      def `.`(v2: AbstractVector{ type Dim = V#Dim; type Num = V#Num }): V#Num = ev.toSeq(**(v2)).sum(ev.num)
+      def dot(v2: AbstractVector{ type Dim = V#Dim; type Num = V#Num }): V#Num = `.`(v2)
     }
 
-    implicit class FractionalVectorOps[V <: AbstractVector/*: Numeric*/](v: V)(implicit ev: VectorTypeEvidence[V], num: Fractional[V#Num]){
+    implicit class FractionalVectorOps[V <: AbstractVector](v: V)(implicit ev: VectorTypeEvidence[V], num: Fractional[V#Num]){
       def abs: V#Num = sqrt( ev.toSeq(v).map(n => ev.num.times(n, n)).sum(ev.num) )
       def normalize: V = {
         val seq = ev.toSeq(v)
@@ -103,6 +98,21 @@ object Vector{
     }
   }
 
+  class VectorNumTransform[V <: AbstractVector, To: Numeric](
+    val get: (V, VectorTypeEvidence[V]) => AbstractVector{ type Dim = V#Dim; type Num = To }
+  )
+
+  trait VectorTransformImplicits{
+
+    implicit class VectorTransform[V <: AbstractVector](v: V)(implicit ev: VectorTypeEvidence[V]){
+      def to[N: Numeric](implicit transform: VectorNumTransform[V, N]): AbstractVector{ type Dim = V#Dim; type Num = N } =
+        transform.get(v, ev)
+    }
+
+    implicit def vectorNumTransform[V <: AbstractVector, To]: VectorNumTransform[V, To] = macro VectorMacros.transformNum[V, To]
+
+  }
+
 
   private def invalid(op: String) = sys.error(s"operation '$op' is not supported for vectors")
 
@@ -116,7 +126,7 @@ object Vector{
     case f: Float   => math.sqrt(f).toFloat.asInstanceOf[Num]
   }
 
-  object Ops extends VectorCreation with VectorImplicits with VectorOpsImplicits
+  object Ops extends VectorCreation with VectorImplicits with VectorOpsImplicits with VectorTransformImplicits
 }
 
 trait Vector2D extends AbstractVector{

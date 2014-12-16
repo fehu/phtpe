@@ -32,6 +32,6 @@ class VectorsSpec extends Specification{ def is = s2""" ${ "Vectors Specificatio
     ${ (1, 2, 3).vec X (3, 2, 1).vec    mustEqual (-4, 8, -4) }
     ${ (1, 2, 3).vec X -(1, 2, 3).vec   mustEqual zeros[Int, _3] }
 
-    ${ ((2d, 3d).vec ** (3d, 2d).vec) ** (1d/6, 1d/6).vec mustEqual (1, 1) } // todo: different underlying type multiplication
+    ${ ((2d, 3d).vec ** (3, 2).vec.to[Double](implicitly, vectorNumTransform)) ** (1d/6, 1d/6).vec mustEqual (1, 1) } // todo: different underlying type multiplication
   """
 }
