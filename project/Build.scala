@@ -1,4 +1,3 @@
-import org.sbtidea.SbtIdeaPlugin._
 import sbt.Keys._
 import sbt._
 import sbtunidoc.Plugin._
@@ -6,7 +5,7 @@ import sbtunidoc.Plugin._
 object  Build extends sbt.Build {
 
   val ScalaVersion = "2.11.4"
-  val Version = "0.3"
+  val Version = "0.4-SNAPSHOT"
 
   import Build.Dependencies._
 
@@ -99,8 +98,7 @@ object  Build extends sbt.Build {
     settings = buildSettings ++ unidocSettings ++ Seq(
       name := "root"
     )
-  ).settings(ideaExcludeFolders := ".idea" :: ".idea_modules" :: Nil)
-   .aggregate(GitDependencies: _*)
+  ).aggregate(GitDependencies: _*)
    .aggregate(phtpe, vectors)
 
   lazy val phtpe = Project("phtpe", file("phtpe"),
