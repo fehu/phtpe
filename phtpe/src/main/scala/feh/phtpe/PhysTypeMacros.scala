@@ -111,12 +111,7 @@ class PhysTypeMacros[C <: whitebox.Context](val c: C){
         debuging("composite", rec(declaration, inverse))
     }
 
-    val res = rec(Tpe.tpe, false).filter(_._2 != 0) match {
-      case map if map.isEmpty => Map("Neutral" -> 0)
-      case map => map
-    }
-
-    debuging("res", res)
+    debuging("res", rec(Tpe.tpe, false).filter(_._2 != 0))
   }
 
   def mergeMaps[K, V](mp: Map[K, V], mp2: Map[K, V])(f: (V, V) => V): Map[K, V] = (mp.keySet ++ mp2.keySet).map{

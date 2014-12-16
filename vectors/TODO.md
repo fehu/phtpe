@@ -1,2 +1,2 @@
-- [ ] some vector operations do not work with different underlying numerics;
+- [x] some vector operations do not work with different underlying numerics; => use `to` method to transform underlying numeric
 - [ ] support more numerics (?)
