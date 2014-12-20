@@ -13,6 +13,7 @@ object  Build extends sbt.Build {
     organization  := "feh.phtpe",
     version       := Version,
     scalaVersion  := ScalaVersion,
+    resolvers     += Resolvers.fehu,
 //    scalacOptions ++= Seq("-explaintypes"),
     scalacOptions += "-deprecation",
 //    scalacOptions += "-feature",
@@ -32,6 +33,8 @@ object  Build extends sbt.Build {
   // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
 
   object Resolvers{
+    lazy val fehu = "Fehu's github repo" at "http://fehu.github.io/repo"
+
     object Release{
       lazy val sonatype = "Sonatype Releases" at "http://oss.sonatype.org/content/repositories/releases"
       lazy val spray = "spray" at "http://repo.spray.io/"
@@ -79,15 +82,13 @@ object  Build extends sbt.Build {
     }
 
     object feh{
-      lazy val util = ProjectRef( uri("git://github.com/fehu/util.git"), "util")
+      lazy val util = "feh.util" %% "util" % "1.0.5"
     }
 
     object js{
       lazy val jquery = "org.webjars" % "jquery" % "2.1.1"
       lazy val bootstrap = "org.webjars" % "bootstrap" % "3.2.0"
     }
-
-    lazy val GitDependencies = feh.util :: Nil //feh.utils.compiler
   }
 
   // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
@@ -98,19 +99,18 @@ object  Build extends sbt.Build {
     settings = buildSettings ++ unidocSettings ++ Seq(
       name := "root"
     )
-  ).aggregate(GitDependencies: _*)
-   .aggregate(phtpe, vectors)
+  ).aggregate(phtpe, vectors)
 
   lazy val phtpe = Project("phtpe", file("phtpe"),
     settings = buildSettings ++ testSettings ++ Seq(
       name := "typing",
-      libraryDependencies ++= Seq(scala.libAll),
+      libraryDependencies ++= Seq(scala.libAll, feh.util),
       initialCommands +=
         s"""import feh.phtpe._
            |import short._
          """.stripMargin
     )
-  ) dependsOn feh.util
+  )
 
   lazy val vectors = Project("vectors", file("vectors"),
     settings = buildSettings ++ testSettings ++ Seq(
