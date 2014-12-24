@@ -97,7 +97,8 @@ object  Build extends sbt.Build {
     id = "root",
     base = file("."),
     settings = buildSettings ++ unidocSettings ++ Seq(
-      name := "root"
+      name := "root",
+      publishArtifact := false
     )
   ).aggregate(phtpe, vectors)
 

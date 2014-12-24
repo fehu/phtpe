@@ -1,6 +1,6 @@
 import sbt._
 import Keys._
-import FileUtils._
+import feh.util.FileUtils._
 import java.lang.{ProcessBuilder => JProcessBuilder}
 
 object TestSettings {
