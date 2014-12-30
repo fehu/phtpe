@@ -31,12 +31,12 @@ object VectorMacros {
     }
 
     val ev = q"""
-      new VectorTypeEvidence[$V] {
+      new feh.phtpe.vectors.VectorTypeEvidence[$V] {
         val dim: Dim = $dim
-        val num: Numeric[Num] = implicitly[Numeric[$Num]]
+        val num: Numeric[$Num] = implicitly[Numeric[$Num]]
 
-        def toSeq(v: $V): Seq[Num] = v.asInstanceOf[Product].productIterator.toList.asInstanceOf[Seq[Num]]
-        def fromSeq: (Seq[Num]) => $V = $fromSeq
+        def toSeq(v: $V): Seq[$Num] = v.asInstanceOf[Product].productIterator.toList.asInstanceOf[Seq[$Num]]
+        def fromSeq: (Seq[$Num]) => $V = $fromSeq
       }
     """
     c.Expr[VectorTypeEvidence[V]](ev)
