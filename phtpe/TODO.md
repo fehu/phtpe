@@ -1,3 +1,4 @@
 - [x] add dimensionless physical type
 - [x] better print formatting
 - [x] attend deprecation warnings
+- [ ] cannot use type declarations: type X = kg/m, 1.of[X]

@@ -7,7 +7,7 @@ abstract class PhysTyped[N: Numeric, Tpe <: PhysType: PhysTypeStringDecompositio
   val value: N
 
   override def toString: String = value + "|" +
-    implicitly[PhysTypeStringDecomposition[Tpe]].decomposition.map(p => p._1 + ": " + p._2).mkString("[", ",", "]")
+    implicitly[PhysTypeStringDecomposition[Tpe]].decomposition.map(p => p._1 + ": " + p._2).mkString("[", ", ", "]")
 }
 
 object PhysTyped extends PhysTypedImplicits

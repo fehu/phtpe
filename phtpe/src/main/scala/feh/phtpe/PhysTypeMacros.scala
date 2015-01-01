@@ -91,8 +91,8 @@ class PhysTypeMacros[C <: whitebox.Context](val c: C){
           case (o@("^" | "^-"),  t :: p :: Nil) =>
             def const = constantTypeToInt(p) * (if(inverse) -1 else 1) * (if(o == "^") 1 else -1)
             debuging("^",
-              if(t <:< typeOf[PhysType.Unit]) Map(t.typeSymbol.name.decodedName.toString -> const)
-              else rec(t, inverse).mapValues(_ * const)
+              if(t <:< typeOf[PhysType.Atom]) Map(t.typeSymbol.name.decodedName.toString -> const)
+              else rec(t, inverse = false).mapValues(_ * const)
             )
 
       }

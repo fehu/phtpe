@@ -1,8 +1,7 @@
 import feh.util.file._
-val projectDir = sys.props("user.home") / "dev/scala/phtpe"
-//val reportsDir = projectDir / "phtpe" / "test-reports"
-val reportsDir = projectDir / "vectors" / "test-reports"
-val f = reportsDir.file
+val subProject = args(0)
+val projectDir = sys.props("user.dir")
+val reportsDir = projectDir / subProject / "test-reports"
 val files = reportsDir.file.listFiles().toList
 println("files: " + files.map(_.name))
 val regexps =
