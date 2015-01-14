@@ -4,14 +4,15 @@ val projectDir = sys.props("user.dir")
 val reportsDir = projectDir / subProject / "test-reports"
 val files = reportsDir.file.listFiles().toList
 println("files: " + files.map(_.name))
+
 val regexps =
-  """\s+(__.+__)"""       -> "\n```\n\n[+] $1\n```scala" ::
-    """ +(.+)\(\+\) +"""  -> "\t[+] $1" ::
-    """ +(.+)\(\+\)"""  -> "\t[+] $1" ::
-    """ \n\|"""           -> "\n```\n\n|" ::
-    """\|\n\|"""          -> "|" ::
-    """##(.+)\n```"""     -> "##$1" ::
-    Nil
+  """\s+(__.+__)"""                         -> "\n```\n\n[+] $1\n```scala" ::
+  """[\s&&[^\n]]*(.+)\(\+\)[\s&&[^\n]]*"""  -> "\t[+] $1" ::
+  """ \n\|"""                               -> "\n```\n\n|" ::
+  """\|\n\|"""                              -> "|" ::
+  """##(.+)\n```"""                         -> "##$1" ::
+  Nil
+
 def refactor(file: File) = {
   val src = io.Source.fromFile(file).mkString
   val result = (src /: regexps){
@@ -25,4 +26,5 @@ def refactor(file: File) = {
   }
   println(s"${file.name} refactored")
 }
+
 files.foreach(refactor)
