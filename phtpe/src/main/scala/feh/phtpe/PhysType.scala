@@ -75,7 +75,9 @@ object PhysType {
   implicit def decomposition[T <: PhysType]: PhysTypeStringDecomposition[T] = macro PhysTypeMacros.decomposition[T]
 }
 
-class PhysTypeStringDecomposition[T <: PhysType](val decomposition: Map[String, Int])
+class PhysTypeStringDecomposition[T <: PhysType](val decomposition: Map[String, Int]){
+  override def toString: String = decomposition.map(p => p._1 + ": " + p._2).mkString("[", ", ", "]")
+}
 class PhysTypeEqualEvidence[L <: PhysType, R <: PhysType]
 class WeakPhysTypeEqualEvidence[L <: PhysType, R <: PhysType](val equal: Boolean){
   def asOption[Res](res: =>Res) = if(equal) Some(res) else None

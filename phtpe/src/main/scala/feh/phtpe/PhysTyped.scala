@@ -6,8 +6,7 @@ import feh.phtpe.PhysType.IntegerConstant
 abstract class PhysTyped[N: Numeric, Tpe <: PhysType: PhysTypeStringDecomposition]{
   val value: N
 
-  override def toString: String = value + "|" +
-    implicitly[PhysTypeStringDecomposition[Tpe]].decomposition.map(p => p._1 + ": " + p._2).mkString("[", ", ", "]")
+  override def toString: String = value + "|" + implicitly[PhysTypeStringDecomposition[Tpe]].toString
 }
 
 object PhysTyped extends PhysTypedImplicits
