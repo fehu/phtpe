@@ -13,6 +13,7 @@ object Units{
     import feh.phtpe.Units.SI.Short._
 
     class Newton    private() extends (kg ** m / (s ^ _2)) with PhysType.Unit
+    class Pascal    private() extends (N/(m^_2)) with PhysType.Unit
     class Joule     private() extends (N ** m) with PhysType.Unit
     class Watt      private() extends (Joule/s) with PhysType.Unit
     class Coulomb   private() extends (A ** s) with PhysType.Unit
@@ -49,6 +50,7 @@ object Units{
       final type Candela  = SI.Candela
 
       final type Newton   = SI.Newton
+      final type Pascal   = SI.Pascal
       final type Joule    = SI.Joule
       final type Watt     = SI.Watt
       final type Coulomb  = SI.Coulomb
