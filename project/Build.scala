@@ -1,3 +1,4 @@
+import feh.util.TestReportsCopy
 import sbt.Keys._
 import sbt._
 import sbtunidoc.Plugin._
@@ -14,66 +15,24 @@ object  Build extends sbt.Build {
     version       := Version,
     scalaVersion  := ScalaVersion,
     resolvers     += Resolvers.fehu,
-//    scalacOptions ++= Seq("-explaintypes"),
-    scalacOptions += "-deprecation",
-//    scalacOptions += "-feature",
-//    scalacOptions ++= Seq("-Ydebug"),
-//    scalacOptions ++= Seq("-Xlog-free-terms"),
-//    scalacOptions ++= Seq("-Ymacro-debug-lite"),
     scalacOptions in (Compile, doc) ++= Seq("-diagrams", "-diagrams-max-classes", "50", "-diagrams-max-implicits", "20")
-//     mainClass in Compile := Some("")
   )
 
-  lazy val testSettings = TestSettings.get ++ Seq(
-    TestSettings.copyTestReportsDir <<= baseDirectory(base => Some(base / "test-reports")),
-    TestSettings.autoAddReportsToGit := true,
-    resolvers += Resolvers.Release.scalaz
+  lazy val testSettings = TestReportsCopy.settings ++ Seq(
+    libraryDependencies += Build.Dependencies.Tests.specs2,
+    TestReportsCopy.copyTestReportsDir <<= baseDirectory(base => Some(base / "test-reports")),
+    TestReportsCopy.autoAddReportsToGit := true
   )
 
   // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //
 
   object Resolvers{
     lazy val fehu = "Fehu's github repo" at "http://fehu.github.io/repo"
-
-    object Release{
-      lazy val sonatype = "Sonatype Releases" at "http://oss.sonatype.org/content/repositories/releases"
-      lazy val spray = "spray" at "http://repo.spray.io/"
-      lazy val scalaz = "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
-    }
-
-    object Snapshot{
-      lazy val sonatype = "Sonatype Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots"
-      lazy val eulergui = "eulergui" at "http://eulergui.sourceforge.net/maven2"
-      lazy val spray = "spray nightlies repo" at "http://nightlies.spray.io"
-    }
-
   }
 
   object Dependencies{
-    def AkkaVersion = "2.3.3"
-    lazy val akka = "com.typesafe.akka" %% "akka-actor" % AkkaVersion
-    lazy val akkaSlf4j = "com.typesafe.akka" %% "akka-slf4j" % AkkaVersion
-    lazy val slf4j = "org.slf4j" % "slf4j-log4j12" % "1.7.7"
-
     object scala{
-      lazy val compiler = "org.scala-lang" % "scala-compiler" % ScalaVersion
-      lazy val swing = "org.scala-lang" % "scala-swing" % ScalaVersion
-      lazy val reflectApi = "org.scala-lang" % "scala-reflect" % ScalaVersion
       lazy val libAll = "org.scala-lang" % "scala-library-all" % ScalaVersion // 2.11.x
-    }
-
-    object typesafe{
-      lazy val config = "com.typesafe" % "config" % "1.2.1"
-    }
-
-    object Apache{
-      lazy val ioCommons = "commons-io" % "commons-io" % "2.4"
-    }
-
-    object spray{
-      lazy val json = "io.spray" %%  "spray-json" % "1.2.6"
-      lazy val can = "io.spray" %% "spray-can" % "1.3.1"
-      lazy val websocket= "com.wandoulabs.akka" %% "spray-websocket" % "0.1.3"
     }
 
     object Tests{
@@ -83,11 +42,6 @@ object  Build extends sbt.Build {
 
     object feh{
       lazy val util = "feh.util" %% "util" % "1.0.5"
-    }
-
-    object js{
-      lazy val jquery = "org.webjars" % "jquery" % "2.1.1"
-      lazy val bootstrap = "org.webjars" % "bootstrap" % "3.2.0"
     }
   }
 
