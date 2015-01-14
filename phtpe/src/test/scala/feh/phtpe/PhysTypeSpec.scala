@@ -16,5 +16,11 @@ class PhysTypeSpec extends Specification {
     ${ PhysType.areEqual[s / s, Neutral] }
     ${ PhysType.areEqual[kg ** ((m/s)^_2), N ** m] }
     ${ PhysType.areEqual[C/(kg ** ((m/s)^_2)), C/(N ** m)] }
+    ${ PhysType.areEqual[Pascal**(m^_2), Newton] }
+
+  __Aliases__
+    ${ type X = kg/(s^_2);    PhysType.areEqual[X, N/m] }
+    ${ type X = kg**(s^-_2);  PhysType.areEqual[X, N/m] }
+    ${ type X = kg**(kg^-_1); PhysType.areEqual[X, Neutral] }
   """
 }

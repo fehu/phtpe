@@ -74,9 +74,8 @@ class PhysTypeMacros[C <: whitebox.Context](val c: C){
   }
   
   def atomPowers[Tpe <: PhysType](implicit Tpe: WeakTypeTag[Tpe]): Map[String, Int] = {
-    def aliasTpe = c.typeOf[PhysType.Composite.Alias]
 
-    def debuging(what: String, f: => Map[String, Int]) = {
+    def debugging(what: String, f: => Map[String, Int]) = {
       if(DEBUG) c.info(NoPosition, what, true)
       val res = f
       if(DEBUG) c.info(NoPosition, what + ": " + res, true)
@@ -84,21 +83,24 @@ class PhysTypeMacros[C <: whitebox.Context](val c: C){
     }
 
     def rec(tpe: Type, inverse: Boolean): Map[String, Int] = tpe match {
-      case TypeRef(a, op, args) if a <:< aliasTpe && !(op.typeSignature <:< typeOf[PhysType.Unit]) =>
+      case t@TypeRef(_, op, args) if t <:< c.typeOf[PhysType.Composite] && !(t <:< typeOf[PhysType.Unit]) =>
         op.asType.name.decodedName.toString -> args match {
-          case ("/",  l :: r :: Nil) => debuging("/", mergeMaps(rec(l, inverse), rec(r, !inverse))(_ + _))
-          case ("**", l :: r :: Nil) => debuging("**", mergeMaps(rec(l, inverse), rec(r,  inverse))(_ + _))
-          case (o@("^" | "^-"),  t :: p :: Nil) =>
+          case ("/" | "Division" ,  l :: r :: Nil) =>
+            debugging("/", mergeMaps(rec(l, inverse), rec(r, !inverse))(_ + _))
+          case ("**" | "Multiplication", l :: r :: Nil) =>
+            debugging("*", mergeMaps(rec(l, inverse), rec(r,  inverse))(_ + _))
+          case (o@("^" | "^-" | "Power"),  t :: p :: Nil) =>
             def const = constantTypeToInt(p) * (if(inverse) -1 else 1) * (if(o == "^") 1 else -1)
-            debuging("^",
+            debugging("^",
               if(t <:< typeOf[PhysType.Atom]) Map(t.typeSymbol.name.decodedName.toString -> const)
               else rec(t, inverse = false).mapValues(_ * const)
             )
+          case _ /* alias */ => rec(t.dealias, inverse)
 
       }
       case atom if atom <:< typeOf[PhysType.Neutral] => Map()
       case atom if atom <:< typeOf[PhysType.Atom] =>
-        debuging("atom", Map(atom.typeSymbol.name.decodedName.toString -> (if(inverse) -1 else 1)))
+        debugging("atom", Map(atom.typeSymbol.name.decodedName.toString -> (if(inverse) -1 else 1)))
       case composite if composite <:< typeOf[PhysType.Unit] =>
         val declaration = composite.baseClasses.map(_.typeSignature)
           .collect {
@@ -108,10 +110,10 @@ class PhysTypeMacros[C <: whitebox.Context](val c: C){
           .parents.filter(_ <:< typeOf[PhysType.Composite])
           .ensuring(_.size == 1).head
 
-        debuging("composite", rec(declaration, inverse))
+        debugging("composite", rec(declaration, inverse))
     }
 
-    debuging("res", rec(Tpe.tpe, false).filter(_._2 != 0))
+    debugging("res", rec(Tpe.tpe, false).filter(_._2 != 0))
   }
 
   def mergeMaps[K, V](mp: Map[K, V], mp2: Map[K, V])(f: (V, V) => V): Map[K, V] = (mp.keySet ++ mp2.keySet).map{
