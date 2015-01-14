@@ -5,7 +5,7 @@ import sbtunidoc.Plugin._
 
 object  Build extends sbt.Build {
 
-  val ScalaVersion = "2.11.4"
+  val ScalaVersion = "2.11.5"
   val Version = "0.4-SNAPSHOT"
 
   import Build.Dependencies._
@@ -41,7 +41,7 @@ object  Build extends sbt.Build {
     }
 
     object feh{
-      lazy val util = "feh.util" %% "util" % "1.0.5"
+      lazy val util = "feh.util" %% "util" % "1.0.6-SNAPSHOT"
     }
   }
 
