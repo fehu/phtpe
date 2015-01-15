@@ -20,4 +20,4 @@
    
 ```
 
-| PhysTyped Usage Examples | Finished in 19 ms | 1 example, 3 expectations, 0 failure, 0 error |
+| PhysTyped Usage Examples | Finished in 10 ms | 1 example, 3 expectations, 0 failure, 0 error |

@@ -25,6 +25,9 @@ trait PhysTypedImplicits{
   implicit final class PhysTypeCreation[N: Numeric](v: N){
     def @@[Tpe <: PhysType: PhysTypeStringDecomposition] = PhysTyped[N, Tpe](v)
     def of[Tpe <: PhysType: PhysTypeStringDecomposition] = PhysTyped[N, Tpe](v)
+    def of[Pref <: Prefix, Tpe <: PhysType](implicit pref: PrefixNumeric[Pref, N],
+                                                     decomposition: PhysTypeStringDecomposition[Tpe]): PhysTyped[N, Tpe] =
+      PhysTyped[N, Tpe]( implicitly[Numeric[N]].times(v, pref.modifier) )
   }
 
   implicit def phTypedSafeCasting[N, Tpe <: PhysType, Expected <: PhysType: PhysTypeStringDecomposition]

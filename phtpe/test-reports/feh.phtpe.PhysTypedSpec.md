@@ -70,4 +70,4 @@
    
 ```
 
-| PhysTypedSpec | Finished in 2 ms | 34 examples, 0 failure, 0 error |
+| PhysTypedSpec | Finished in 16 ms | 34 examples, 0 failure, 0 error |

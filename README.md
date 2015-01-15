@@ -1,10 +1,10 @@
 Physical Typing
 =====
-_still under work_
 
 ```scala
 import feh.phtpe._
 import short._
+import Prefixes._
 import vectors._ // "feh.phtpe" %% "vectors" needed
 ```
 
@@ -12,6 +12,7 @@ import vectors._ // "feh.phtpe" %% "vectors" needed
 |:--|:--|:-:|
 |[PhysType](phtpe/src/main/scala/feh/phtpe/PhysType.scala)|A physical type|[specification](phtpe/test-reports/feh.phtpe.PhysTypeSpec.md) ([source](phtpe/src/test/scala/feh/phtpe/PhysTypeSpec.scala))|
 |[PhysTyped[Num, Tpe]](phtpe/src/main/scala/feh/phtpe/PhysTyped.scala)|A physicaly typed numeric value|[specification](phtpe/test-reports/feh.phtpe.PhysTypedSpec.md) ([source](phtpe/src/test/scala/feh/phtpe/PhysTypedSpec.scala))|
+|[Prefixes](phtpe/src/main/scala/feh/phtpe/Prefixes.scala)|SI prefixes for physicaly typed numerics|[specification](phtpe/test-reports/feh.phtpe.PhysTypedPrefixSpec.md) ([source](phtpe/src/test/scala/feh/phtpe/PhysTypedPrefixSpec.scala))|
 | | Some Examples | [Examples](phtpe/test-reports/feh.phtpe.MiscExamples.md) |
 |[AbstractVector](phtpe/src/main/scala/feh/phtpe/AbstractVector.scala)| Abstract Vector, supporting physical typing | |
 |[Vector](vectors/src/main/scala/feh/phtpe/vectors/Vector.scala)| Vectors Implementation | [specification](vectors/test-reports/feh.phtpe.vectors.VectorsSpec.md) ([source](vectors/src/test/scala/feh/phtpe/vectors/VectorsSpec.scala))|
@@ -21,6 +22,9 @@ import vectors._ // "feh.phtpe" %% "vectors" needed
 ```scala
 scala> 3.of[kg] + 4.of[kg]
 res0: feh.phtpe.PhysTyped[Int,feh.phtpe.short.kg] = 7|[Kilogram: 1]
+
+scala> 3f.of[kg] + 4f.of[Milli, kg]
+res1: feh.phtpe.PhysTyped[Float,feh.phtpe.short.kg] = 3.004|[Kilogram: 1]
 
 scala> 3.of[kg] + 4.of[s]
 <console>:17: error: could not find implicit value for parameter ev: feh.phtpe.PhysTypeEqualEvidence[feh.phtpe.short.kg,feh.phtpe.short.s]
