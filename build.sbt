@@ -1,7 +1,7 @@
 
 lazy val commonSettings = Seq(
   organization := "feh.phtpe",
-  crossScalaVersions := Seq("2.11.5", "2.10.4"),
+  crossScalaVersions := Seq("2.11.5"),
   scalaVersion := crossScalaVersions.value.head,
   scalacOptions in (Compile, doc) ++= Seq("-diagrams", "-diagrams-max-classes", "50", "-diagrams-max-implicits", "20")
 )
