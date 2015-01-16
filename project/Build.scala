@@ -6,7 +6,7 @@ import sbtunidoc.Plugin._
 object  Build extends sbt.Build {
 
   val ScalaVersion = "2.11.5"
-  val Version = "0.4"
+  val Version = "0.5-SNAPSHOT"
 
   import Build.Dependencies._
 
