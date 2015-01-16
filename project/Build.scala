@@ -19,7 +19,9 @@ object  Build extends sbt.Build {
   )
 
   lazy val testSettings = TestReportsCopy.settings ++ Seq(
-    libraryDependencies += Build.Dependencies.Tests.specs2,
+    libraryDependencies += "org.specs2" %% "specs2" % "2.4.15" % "test",
+    resolvers ++= Seq("snapshots", "releases").map(Resolver.sonatypeRepo),
+
     TestReportsCopy.copyTestReportsDir <<= baseDirectory(base => Some(base / "test-reports")),
     TestReportsCopy.autoAddReportsToGit := true
   )
@@ -33,11 +35,6 @@ object  Build extends sbt.Build {
   object Dependencies{
     object scala{
       lazy val libAll = "org.scala-lang" % "scala-library-all" % ScalaVersion // 2.11.x
-    }
-
-    object Tests{
-//      lazy val scalaCheck = "org.scalacheck" %% "scalacheck" % "1.10.1" % "test"
-      lazy val specs2 = "org.specs2" %% "specs2" % "2.4.15" % "test"
     }
 
     object feh{
