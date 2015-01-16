@@ -1,6 +1,8 @@
 Physical Typing
 =====
 
+![Build status by travis-ci](https://travis-ci.org/fehu/phtpe.svg)
+
 ```scala
 import feh.phtpe._
 import short._

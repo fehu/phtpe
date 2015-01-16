@@ -6,3 +6,4 @@
 - [x] unit prefixes bundles: kilometer, microvolt, etc
 - [ ] powered units: m2, m3, litre
 - [x] modify refactor-reports.sc to work with bundled tests, like `PhysTypedPrefixSpec`
+- [ ] Breeze (https://github.com/scalanlp/Rbreeze) vectors support
