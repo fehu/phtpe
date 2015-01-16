@@ -1,7 +1,7 @@
 Physical Typing
 =====
 
-Scala 2.11.5: ![Build status by travis-ci](https://travis-ci.org/fehu/phtpe.svg)
+![Build status by travis-ci](https://travis-ci.org/fehu/phtpe.svg)
 
 ```scala
 import feh.phtpe._
