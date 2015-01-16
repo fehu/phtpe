@@ -70,5 +70,5 @@
    
 ```
 
-| PhysTypedSpec | Finished in 18 ms | 34 examples, 0 failure, 0 error |
+| PhysTypedSpec | Finished in 24 ms | 34 examples, 0 failure, 0 error |
 

@@ -102,7 +102,7 @@
    
 ```
 
-| Decremental | Finished in 5 ms | 18 examples, 0 failure, 0 error |
+| Decremental | Finished in 3 ms | 18 examples, 0 failure, 0 error |
 
 ## WARNING
 
@@ -112,7 +112,7 @@
    
 ```
 
-| WARNING | Finished in 1 ms | 1 example, 0 failure, 0 error |
+| WARNING | Finished in 0 ms | 1 example, 0 failure, 0 error |
 
 ## Prefixed Units
 
@@ -130,5 +130,5 @@
 | Prefixed Units | Finished in 0 ms | 5 examples, 0 failure, 0 error |
 
 
-| SI Prefixes| Finished in 12 ms | 61 examples, 0 failure, 0 error |
+| SI Prefixes | Finished in 6 ms | 61 examples, 0 failure, 0 error |
 
