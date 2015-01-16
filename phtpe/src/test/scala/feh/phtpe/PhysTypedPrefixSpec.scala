@@ -6,7 +6,9 @@ import org.specs2.Specification
 class PhysTypedPrefixSpec extends Specification {
   def is = "SI Prefixes\n".title ^
     new PhysTypedIncrementalPrefixSpec ^
-    new PhysTypedDecrementalPrefixSpec
+    new PhysTypedDecrementalPrefixSpec ^
+    new NumericOverflow ^
+    new PhysTypedBundledPrefixSpec
 }
 
 class PhysTypedIncrementalPrefixSpec extends Specification {
@@ -91,5 +93,24 @@ class PhysTypedDecrementalPrefixSpec extends Specification {
     ${ BigDecimal(1).of[Micro, Meter] phEquals 1e-6.of[Meter] }
     ${ BigDecimal(1).of[Nano, Meter]  phEquals 1e-9.of[Meter] }
     ${ BigDecimal(1).of[Pico, Meter]  phEquals 1e-12.of[Meter] }
+  """
+}
+
+class NumericOverflow extends Specification{
+  def is = s2""" ${ "WARNING".title }
+    __Prefixes might cause errors due to java's primitive types overflow__
+    ${ 1000.of[Giga, Volt].value != 1L.of[Tera, Volt].value }
+  """
+}
+
+class PhysTypedBundledPrefixSpec extends Specification{
+  def is = s2""" ${ "Prefixed Units".title }
+    __ __
+    ${ type km = Prefixed[Kilo, Meter]; 1.of[km]    phEquals 1000.of[Meter] }
+    ${ type km = Kilo@@Meter;           1.of[km]    phEquals 1000.of[Meter] }
+    ${ type gr = Milli@@Kilogram;       1f.of[gr]   phEquals 1e-3f.of[Kilogram] }
+    ${ type pF = Pico@@Farad;           1e12.of[pF] phEquals 1.of[Farad] }
+
+    ${ type GV = Giga@@Volt; type TV = Tera@@Volt; 1000L.of[GV] phEquals 1L.of[TV] }
   """
 }

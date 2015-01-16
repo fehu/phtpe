@@ -1,8 +1,20 @@
 package feh.phtpe
 
 sealed trait Prefix
-trait PrefixNumeric[Pref <: Prefix, N]{
+sealed trait PrefixNumeric[Pref <: Prefix, N]{
   def modifier: N
+}
+
+sealed trait PrefixBundle{
+  type Prefix <: feh.phtpe.Prefix
+  type Tpe <: PhysType
+}
+
+object PrefixBundle{
+  class Evidence[N: Numeric, Bundle <: PrefixBundle](
+    val prefixNumeric: PrefixNumeric[Bundle#Prefix, N],
+    val physTypeStringDecomposition: PhysTypeStringDecomposition[Bundle#Tpe]
+  )
 }
 
 object Prefixes {
@@ -31,6 +43,14 @@ object Prefixes {
   sealed trait Nano extends Prefix
   /** e-12 */
   sealed trait Pico	extends Prefix
+
+  type Prefixed[Pref <: Prefix, Type <: PhysType] = PrefixBundle{ type Prefix = Pref; type Tpe = Type }
+  type @@[Pref <: Prefix, Tpe <: PhysType] = Prefixed[Pref, Tpe]
+
+  implicit def prefixedBundleEvidence[N, Bundle <: PrefixBundle](implicit num: Numeric[N],
+                                                                          prefNum: PrefixNumeric[Bundle#Prefix, N],
+                                                                          decompose: PhysTypeStringDecomposition[Bundle#Tpe]): PrefixBundle.Evidence[N, Bundle] =
+    new PrefixBundle.Evidence[N, Bundle](prefNum, decompose)
 
   private class PrefixInt[Pref <: Prefix, N: Numeric](i: Int) extends PrefixNumeric[Pref, N] {
     def modifier: N = implicitly[Numeric[N]].fromInt(i)

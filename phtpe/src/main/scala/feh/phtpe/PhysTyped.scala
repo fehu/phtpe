@@ -28,6 +28,8 @@ trait PhysTypedImplicits{
     def of[Pref <: Prefix, Tpe <: PhysType](implicit pref: PrefixNumeric[Pref, N],
                                                      decomposition: PhysTypeStringDecomposition[Tpe]): PhysTyped[N, Tpe] =
       PhysTyped[N, Tpe]( implicitly[Numeric[N]].times(v, pref.modifier) )
+    def of[Bundle <: PrefixBundle](implicit ev: PrefixBundle.Evidence[N, Bundle]): PhysTyped[N, Bundle#Tpe] =
+      of(ev.prefixNumeric, ev.physTypeStringDecomposition)
   }
 
   implicit def phTypedSafeCasting[N, Tpe <: PhysType, Expected <: PhysType: PhysTypeStringDecomposition]

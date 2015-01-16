@@ -63,6 +63,7 @@ object  Build extends sbt.Build {
       initialCommands +=
         s"""import feh.phtpe._
            |import short._
+           |import Prefixes._
          """.stripMargin
     )
   )
@@ -72,6 +73,7 @@ object  Build extends sbt.Build {
       initialCommands +=
         s"""import feh.phtpe._
            |import short._
+           |import Prefixes._
            |import vectors._
          """.stripMargin
     )

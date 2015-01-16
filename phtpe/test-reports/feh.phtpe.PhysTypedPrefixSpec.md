@@ -41,7 +41,7 @@
 	[+] 1f.of[Tera, Meter]  phEquals 1e12f.of[Meter]  
     
         note that:
-	[+] (1f.of[Tera, Meter] phEquals 1e12d.of[Meter]) isFailure
+	[+] (1f.of[Tera, Meter] phEquals 1e12d.of[Meter]) isFailure  
         because
 	[+] 1e12f != 1e12d  
 ```
@@ -102,6 +102,33 @@
    
 ```
 
-| Decremental | Finished in 2 ms | 18 examples, 0 failure, 0 error |
+| Decremental | Finished in 5 ms | 18 examples, 0 failure, 0 error |
 
-| SI Prefixes | Finished in 5 ms | 55 examples, 0 failure, 0 error |
+## WARNING
+
+[+] __Prefixes might cause errors due to java's primitive types overflow__
+```scala
+	[+] 1000.of[Giga, Volt].value != 1L.of[Tera, Volt].value  
+   
+```
+
+| WARNING | Finished in 1 ms | 1 example, 0 failure, 0 error |
+
+## Prefixed Units
+
+[+] __ __
+```scala
+	[+] type km = Prefixed[Kilo, Meter]; 1.of[km]    phEquals 1000.of[Meter]  
+	[+] type km = Kilo@@Meter;           1.of[km]    phEquals 1000.of[Meter]  
+	[+] type gr = Milli@@Kilogram;       1f.of[gr]   phEquals 1e-3f.of[Kilogram]  
+	[+] type pF = Pico@@Farad;           1e12.of[pF] phEquals 1.of[Farad]  
+    
+	[+] type GV = Giga@@Volt; type TV = Tera@@Volt; 1000L.of[GV] phEquals 1L.of[TV]  
+   
+```
+
+| Prefixed Units | Finished in 0 ms | 5 examples, 0 failure, 0 error |
+
+
+| SI Prefixes| Finished in 12 ms | 61 examples, 0 failure, 0 error |
+

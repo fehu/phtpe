@@ -3,6 +3,6 @@
 - [x] attend deprecation warnings
 - [x] cannot use type declarations: type X = kg/m, 1.of[X]
 - [x] unit prefixes
-- [ ] unit prefixes bundles: kilometer, microvolt, etc
-- [ ] powered units: m2, m3, liter
-- [ ] modify refactor-reports.sc to work with buRndled tests, like `PhysTypedPrefixSpec`
+- [x] unit prefixes bundles: kilometer, microvolt, etc
+- [ ] powered units: m2, m3, litre
+- [x] modify refactor-reports.sc to work with bundled tests, like `PhysTypedPrefixSpec`

@@ -18,7 +18,7 @@ object Units{
     class Watt      private() extends (Joule/s) with PhysType.Unit
     class Coulomb   private() extends (A ** s) with PhysType.Unit
     class Volt      private() extends (Joule / Coulomb) with PhysType.Unit
-//    class Farad     private() extends (Joule / Coulomb) with PhysType.Unit
+    class Farad     private() extends (Joule / Coulomb) with PhysType.Unit
 
     trait Short{
       final type s   = Second
@@ -34,6 +34,7 @@ object Units{
       final type W   = Watt
       final type C   = Coulomb
       final type V   = Volt
+      final type F   = Farad
     }
 
     object Short extends Short
@@ -55,6 +56,7 @@ object Units{
       final type Watt     = SI.Watt
       final type Coulomb  = SI.Coulomb
       final type Volt     = SI.Volt
+      final type Farad    = SI.Farad
     }
   }
 }
