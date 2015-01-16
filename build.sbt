@@ -7,6 +7,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val root = project.in(file("."))
+  .settings(commonSettings: _*)
   .settings(sbtunidoc.Plugin.unidocSettings: _*)
   .settings(publishArtifact := false)
   .aggregate(typing, vectors)
