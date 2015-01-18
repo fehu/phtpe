@@ -21,6 +21,9 @@ import vectors._ // "feh.phtpe" %% "vectors" needed
 |[Vector](vectors/src/main/scala/feh/phtpe/vectors/Vector.scala)| Vectors Implementation | [specification](vectors/test-reports/feh.phtpe.vectors.VectorsSpec.md) ([source](vectors/src/test/scala/feh/phtpe/vectors/VectorsSpec.scala))|
 |[VectorMeasures](vectors/src/main/scala/feh/phtpe/vectors/VectorMeasures.scala)| PhysTyped Vector wrappers | [specification](vectors/test-reports/feh.phtpe.vectors.VectorMeasuresSpec.md) ([source](vectors/src/test/scala/feh/phtpe/vectors/VectorMeasuresSpec.scala))| 
 
+|   |   |   |
+|:--|:-:|:-:|
+|**TODO**:| [typing](phtpe/TODO.md) | [vectors](vectors/TODO.md) |
 
 ```scala
 scala> 3.of[kg] + 4.of[kg]
@@ -60,7 +63,3 @@ scala> (3, 3, 2).vector[m/s] * 4.of[s] - (1, 1, 0).vector[m/s]*4 =@= (1, 2, 3).v
                                               ^              
 
 ```
-
-|   |   |   |
-|:--|:-:|:-:|
-|**TODO**:| [typing](phtpe/TODO.md) | [vectors](vectors/TODO.md) |
