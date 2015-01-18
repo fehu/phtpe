@@ -20,5 +20,5 @@
    
 ```
 
-| PhysTyped Usage Examples | Finished in 23 ms | 1 example, 3 expectations, 0 failure, 0 error |
+| PhysTyped Usage Examples | Finished in 12 ms | 1 example, 3 expectations, 0 failure, 0 error |
 

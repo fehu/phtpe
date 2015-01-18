@@ -6,3 +6,5 @@
 - [x] unit prefixes bundles: kilometer, microvolt, etc
 - [ ] powered units: m2, m3, litre
 - [x] modify refactor-reports.sc to work with bundled tests, like `PhysTypedPrefixSpec`
+
+see also [TodoSpec](test-reports/feh.phtpe.TodoSpec.md) ([source](src/test/scala/feh/phtpe/TodoSpec.scala))

@@ -22,5 +22,5 @@
    
 ```
 
-| PhysType Specification | Finished in 22 ms | 13 examples, 0 failure, 0 error |
+| PhysType Specification | Finished in 13 ms | 13 examples, 0 failure, 0 error |
 

@@ -67,7 +67,7 @@
    
 ```
 
-| Incremental | Finished in 2 ms | 37 examples, 0 failure, 0 error |
+| Incremental | Finished in 3 ms | 37 examples, 0 failure, 0 error |
 
 ## Decremental
 
@@ -102,7 +102,7 @@
    
 ```
 
-| Decremental | Finished in 3 ms | 18 examples, 0 failure, 0 error |
+| Decremental | Finished in 1 ms | 18 examples, 0 failure, 0 error |
 
 ## WARNING
 
@@ -112,7 +112,7 @@
    
 ```
 
-| WARNING | Finished in 0 ms | 1 example, 0 failure, 0 error |
+| WARNING | Finished in 1 ms | 1 example, 0 failure, 0 error |
 
 ## Prefixed Units
 
