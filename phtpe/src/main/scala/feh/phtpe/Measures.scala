@@ -15,13 +15,13 @@ object Measures{
   trait SI extends Measures{
     import short._
 
-    type Mass = Measure.Scalar[_, kg]
-    type Time = Measure.Scalar[_, s]
+    type Mass <: Measure.Scalar[_, kg]
+    type Time <: Measure.Scalar[_, s]
     type Temperature <: Measure.Scalar[_, K]
 
-    type Distance     = Measure.Vector[_ <: AbstractVector, m]
-    type Speed        = Measure.Vector[_ <: AbstractVector, m/s]
-    type Acceleration = Measure.Vector[_ <: AbstractVector, m/(s^_2)]
-    type Force        = Measure.Vector[_ <: AbstractVector, N]
+    type Distance     <: Measure.Vector[_ <: AbstractVector, m]
+    type Speed        <: Measure.Vector[_ <: AbstractVector, m/s]
+    type Acceleration <: Measure.Vector[_ <: AbstractVector, m/(s^_2)]
+    type Force        <: Measure.Vector[_ <: AbstractVector, N]
   }
 }
