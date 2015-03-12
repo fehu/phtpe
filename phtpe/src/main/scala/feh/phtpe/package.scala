@@ -42,11 +42,9 @@ package object phtpe extends PhysType.Composite.Alias with Units.SI.Alias with P
   final type Neutral = PhysType.Neutral
   final def Neutral = PhysType.Neutral
 
-  type Measure[Num, Tpe <: PhysType] = PhysTyped[Num, Tpe]
-
   object Measure{
-    type Scalar[Num, Tpe <: PhysType] = Measure[Num, Tpe]
+    type Scalar[Num, Tpe <: PhysType] = PhysTyped[Num, Tpe]
 
-    type Vector[V <: AbstractVector, Tpe <: PhysType] = Measure[V, Tpe]
+    type Vector[V <: AbstractVector, Tpe <: PhysType] = PhysTyped[V, Tpe]
   }
 }
