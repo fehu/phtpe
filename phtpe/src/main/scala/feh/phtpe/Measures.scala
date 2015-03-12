@@ -17,6 +17,7 @@ object Measures{
 
     type Mass = Measure.Scalar[_, kg]
     type Time = Measure.Scalar[_, s]
+    type Temperature <: Measure.Scalar[_, K]
 
     type Distance     = Measure.Vector[_ <: AbstractVector, m]
     type Speed        = Measure.Vector[_ <: AbstractVector, m/s]
