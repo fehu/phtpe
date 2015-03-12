@@ -1,26 +1,26 @@
 package feh.phtpe
 
 trait Measures{
-  type Mass[Num] <: Measure.Scalar[Num, _]
-  type Time[Num] <: Measure.Scalar[Num, _]
-  type Temperature[Num] <: Measure.Scalar[Num, _]
+  type Mass <: Measure.Scalar[_, _]
+  type Time <: Measure.Scalar[_, _]
+  type Temperature <: Measure.Scalar[_, _]
 
-  type Distance[Num, V <: AbstractVector]        <: Measure.Vector[V, _]
-  type Speed[Num, V <: AbstractVector]           <: Measure.Vector[V, _]
-  type Acceleration[Num, V <: AbstractVector]    <: Measure.Vector[V, _]
-  type Force[Num, V <: AbstractVector]           <: Measure.Vector[V, _]
+  type Distance        <: Measure.Vector[_ <: AbstractVector, _]
+  type Speed           <: Measure.Vector[_ <: AbstractVector, _]
+  type Acceleration    <: Measure.Vector[_ <: AbstractVector, _]
+  type Force           <: Measure.Vector[_ <: AbstractVector, _]
 }
 
 object Measures{
   trait SI extends Measures{
     import short._
 
-    type Mass[Num] = Measure.Scalar[Num, kg]
-    type Time[Num] = Measure.Scalar[Num, s]
+    type Mass = Measure.Scalar[_, kg]
+    type Time = Measure.Scalar[_, s]
 
-    type Distance[Num, V <: AbstractVector]     = Measure.Vector[V, m]
-    type Speed[Num, V <: AbstractVector]        = Measure.Vector[V, m/s]
-    type Acceleration[Num, V <: AbstractVector] = Measure.Vector[V, m/(s^_2)]
-    type Force[Num, V <: AbstractVector]        = Measure.Vector[V, N]
+    type Distance     = Measure.Vector[_ <: AbstractVector, m]
+    type Speed        = Measure.Vector[_ <: AbstractVector, m/s]
+    type Acceleration = Measure.Vector[_ <: AbstractVector, m/(s^_2)]
+    type Force        = Measure.Vector[_ <: AbstractVector, N]
   }
 }
