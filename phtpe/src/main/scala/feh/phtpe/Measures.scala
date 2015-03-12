@@ -3,6 +3,7 @@ package feh.phtpe
 trait Measures{
   type Mass[Num] <: Measure.Scalar[Num, _]
   type Time[Num] <: Measure.Scalar[Num, _]
+  type Temperature[Num] <: Measure.Scalar[Num, _]
 
   type Distance[Num, V <: AbstractVector]        <: Measure.Vector[V, _]
   type Speed[Num, V <: AbstractVector]           <: Measure.Vector[V, _]
@@ -11,7 +12,7 @@ trait Measures{
 }
 
 object Measures{
-  object SI extends Measures{
+  trait SI extends Measures{
     import short._
 
     type Mass[Num] = Measure.Scalar[Num, kg]
