@@ -10,39 +10,39 @@ trait VectorMeasureOpsImplicits extends VectorOpsImplicits{
                                                                                                   ev: VectorTypeEvidence[V]
                                                                                           )
   {
-    def vector[Tpe <: PhysType: PhysTypeStringDecomposition] = PhysTyped[V, Tpe](t)
+    def vector[Tpe <: PhysType: PhysTypeDecomposition] = PhysTyped[V, Tpe](t)
   }
   
   implicit class VectorMeasureOps[V <: AbstractVector: VectorTypeEvidence, Tpe <: PhysType](v: Measure.Vector[V, Tpe]){
     private implicit def num = implicitly[VectorTypeEvidence[V]].num
 
-    def *(n: V#Num)(implicit ev: PhysTypeStringDecomposition[Tpe]): V|Tpe = v.value * n
-    def *[Tpe2 <: PhysType](n: V#Num|Tpe2)(implicit ev: PhysTypeStringDecomposition[Tpe**Tpe2]): V|(Tpe**Tpe2) = v.value * n.value
+    def *(n: V#Num)(implicit ev: PhysTypeDecomposition[Tpe]): V|Tpe = v.value * n
+    def *[Tpe2 <: PhysType](n: V#Num|Tpe2)(implicit ev: PhysTypeDecomposition[Tpe**Tpe2]): V|(Tpe**Tpe2) = v.value * n.value
 
     /** by-elem */
     def **[Tpe2 <: PhysType](v2: AbstractVector{ type Dim = V#Dim; type Num = V#Num }|Tpe2)
-                            (implicit ev: PhysTypeStringDecomposition[Tpe**Tpe2]): V|(Tpe**Tpe2) = v.value ** v2.value
+                            (implicit ev: PhysTypeDecomposition[Tpe**Tpe2]): V|(Tpe**Tpe2) = v.value ** v2.value
 
     /** dot product */
     def `.`[Tpe2 <: PhysType](v2: AbstractVector{ type Dim = V#Dim; type Num = V#Num }|Tpe2)
-                             (implicit ev: PhysTypeStringDecomposition[Tpe**Tpe2]): V#Num|(Tpe**Tpe2) = (v.value `.` v2.value)
+                             (implicit ev: PhysTypeDecomposition[Tpe**Tpe2]): V#Num|(Tpe**Tpe2) = (v.value `.` v2.value)
     def dot[Tpe2 <: PhysType](v2: AbstractVector{ type Dim = V#Dim; type Num = V#Num }|Tpe2)
-                             (implicit ev: PhysTypeStringDecomposition[Tpe**Tpe2]): V#Num|(Tpe**Tpe2) = `.`(v2)
+                             (implicit ev: PhysTypeDecomposition[Tpe**Tpe2]): V#Num|(Tpe**Tpe2) = `.`(v2)
   }
 
   implicit class FractionalVectorMeasureOps[V <: AbstractVector, Tpe <: PhysType](v: Measure.Vector[V, Tpe])
                                                                              (implicit ev: VectorTypeEvidence[V],
                                                                                        num: Fractional[V#Num],
 //                                                                                       numV: Numeric[V],
-                                                                                       d: PhysTypeStringDecomposition[Tpe])
+                                                                                       d: PhysTypeDecomposition[Tpe])
   {
     def abs: V#Num|Tpe = v.value.abs
     def normalize: V|Tpe  = v.value.normalize
     def /(n: V#Num): V|Tpe = v.value / n
-    def /[Tpe2 <: PhysType](v2: V#Num|Tpe2)(implicit ev2: PhysTypeStringDecomposition[Tpe/Tpe2]): V|(Tpe/Tpe2) = v.value / v2.value
+    def /[Tpe2 <: PhysType](v2: V#Num|Tpe2)(implicit ev2: PhysTypeDecomposition[Tpe/Tpe2]): V|(Tpe/Tpe2) = v.value / v2.value
   }
 
-  implicit class Vector2DMeasureOps[V <: Vector2D: VectorTypeEvidence, Tpe <: PhysType: PhysTypeStringDecomposition](v: Measure.Vector[V, Tpe])
+  implicit class Vector2DMeasureOps[V <: Vector2D: VectorTypeEvidence, Tpe <: PhysType: PhysTypeDecomposition](v: Measure.Vector[V, Tpe])
   {
     private implicit def num = implicitly[VectorTypeEvidence[V]].num.asInstanceOf[Numeric[V#Num]]
 
@@ -53,7 +53,7 @@ trait VectorMeasureOpsImplicits extends VectorOpsImplicits{
     def y = _2
   }
 
-  implicit class Vector3DMeasureOps[V <: Vector3D: VectorTypeEvidence, Tpe <: PhysType: PhysTypeStringDecomposition](v: Measure.Vector[V, Tpe])
+  implicit class Vector3DMeasureOps[V <: Vector3D: VectorTypeEvidence, Tpe <: PhysType: PhysTypeDecomposition](v: Measure.Vector[V, Tpe])
   {
     private implicit def num = implicitly[VectorTypeEvidence[V]].num.asInstanceOf[Numeric[V#Num]]
 
@@ -66,7 +66,7 @@ trait VectorMeasureOpsImplicits extends VectorOpsImplicits{
     def z = _3
 
     /** vector product */
-    def X[Tpe2 <: PhysType](n: V|Tpe2)(implicit ev: PhysTypeStringDecomposition[Tpe**Tpe2]): V|(Tpe**Tpe2) = v.value X n.value
+    def X[Tpe2 <: PhysType](n: V|Tpe2)(implicit ev: PhysTypeDecomposition[Tpe**Tpe2]): V|(Tpe**Tpe2) = v.value X n.value
   }
 }
 
@@ -75,6 +75,6 @@ trait VectorMeasuresTransformsImplicits extends VectorTransformImplicits{
   implicit class VectorMeasureTransform[V <: AbstractVector, Tpe <: PhysType](v: V|Tpe)(implicit ev: VectorTypeEvidence[V]){
     def to[N: Numeric](implicit transform: VectorNumTransform[V, N],
                        vNum: Numeric[AbstractVector{ type Dim = V#Dim; type Num = N }],
-                       d: PhysTypeStringDecomposition[Tpe]): AbstractVector{ type Dim = V#Dim; type Num = N }|Tpe = v.value.to[N]
+                       d: PhysTypeDecomposition[Tpe]): AbstractVector{ type Dim = V#Dim; type Num = N }|Tpe = v.value.to[N]
   }
 }

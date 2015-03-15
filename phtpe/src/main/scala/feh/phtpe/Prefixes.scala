@@ -5,15 +5,15 @@ sealed trait PrefixNumeric[Pref <: Prefix, N]{
   def modifier: N
 }
 
-sealed trait PrefixBundle{
+sealed trait PrefixedPhysType{
   type Prefix <: feh.phtpe.Prefix
   type Tpe <: PhysType
 }
 
-object PrefixBundle{
-  class Evidence[N: Numeric, Bundle <: PrefixBundle](
+object PrefixedPhysType{
+  class Evidence[N: Numeric, Bundle <: PrefixedPhysType](
     val prefixNumeric: PrefixNumeric[Bundle#Prefix, N],
-    val physTypeStringDecomposition: PhysTypeStringDecomposition[Bundle#Tpe]
+    val physTypeStringDecomposition: PhysTypeDecomposition[Bundle#Tpe]
   )
 }
 
@@ -44,13 +44,15 @@ object Prefixes {
   /** e-12 */
   sealed trait Pico	extends Prefix
 
-  type Prefixed[Pref <: Prefix, Type <: PhysType] = PrefixBundle{ type Prefix = Pref; type Tpe = Type }
+  type Prefixed[Pref <: Prefix, Type <: PhysType] = PrefixedPhysType /*with Type*/{ type Prefix = Pref; type Tpe = Type }
   type @@[Pref <: Prefix, Tpe <: PhysType] = Prefixed[Pref, Tpe]
 
-  implicit def prefixedBundleEvidence[N, Bundle <: PrefixBundle](implicit num: Numeric[N],
-                                                                          prefNum: PrefixNumeric[Bundle#Prefix, N],
-                                                                          decompose: PhysTypeStringDecomposition[Bundle#Tpe]): PrefixBundle.Evidence[N, Bundle] =
-    new PrefixBundle.Evidence[N, Bundle](prefNum, decompose)
+
+  implicit def prefixedBundleEvidence[N, PT <: PrefixedPhysType](
+                implicit num: Numeric[N],
+                         prefNum: PrefixNumeric[PT#Prefix, N],
+                         decompose: PhysTypeDecomposition[PT#Tpe]  ): PrefixedPhysType.Evidence[N, PT] =
+      new PrefixedPhysType.Evidence[N, PT](prefNum, decompose)
 
   private class PrefixInt[Pref <: Prefix, N: Numeric](i: Int) extends PrefixNumeric[Pref, N] {
     def modifier: N = implicitly[Numeric[N]].fromInt(i)

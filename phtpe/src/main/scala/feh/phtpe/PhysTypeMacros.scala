@@ -5,7 +5,7 @@ import feh.util._
 import scala.reflect.macros.whitebox
 
 object PhysTypeMacros {
-  object Equal{
+  object Equality{
     def atCompile[Tpe <: PhysType: c.WeakTypeTag, Expected <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[Unit] = {
       import c.universe._
 
@@ -44,12 +44,12 @@ object PhysTypeMacros {
     c.Expr(q"$equal")
   }
 
-  def decomposition[T <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[PhysTypeStringDecomposition[T]] = {
+  def decomposition[T <: PhysType: c.WeakTypeTag](c: whitebox.Context): c.Expr[PhysTypeDecomposition[T]] = {
     import c.universe._
 
     val m = new PhysTypeMacros[c.type](c)
     val entries = m.atomPowers[T].map{ case (name, count) => q"$name -> $count" }.toList
-    c.Expr[PhysTypeStringDecomposition[T]](q"new PhysTypeStringDecomposition[${weakTypeOf[T]}](Map(..$entries))")
+    c.Expr[PhysTypeDecomposition[T]](q"new PhysTypeDecomposition[${weakTypeOf[T]}](Map(..$entries))")
   }
 }
 

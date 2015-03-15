@@ -65,17 +65,17 @@ object PhysType {
   sealed trait NegativeIntegerConstant[Original <: IntegerConstant] extends IntegerConstant
 
   /** aborts on compile */
-  def proveEqual[Tpe <: PhysType, Expected <: PhysType]: scala.Unit = macro PhysTypeMacros.Equal.atCompile[Tpe, Expected]
+  def proveEqual[Tpe <: PhysType, Expected <: PhysType]: scala.Unit = macro PhysTypeMacros.Equality.atCompile[Tpe, Expected]
 
   def areEqual[Tpe <: PhysType, Expected <: PhysType]: Boolean = macro PhysTypeMacros.equal[Tpe, Expected]
 
-  implicit def equalEvidence[L <: PhysType, R <: PhysType]: PhysTypeEqualEvidence[L, R] = macro PhysTypeMacros.Equal.evidence[L, R]
-  implicit def weakEqualEvidence[L <: PhysType, R <: PhysType]: WeakPhysTypeEqualEvidence[L, R] = macro PhysTypeMacros.Equal.weakEvidence[L, R]
+  implicit def equalEvidence[L <: PhysType, R <: PhysType]: PhysTypeEqualEvidence[L, R] = macro PhysTypeMacros.Equality.evidence[L, R]
+  implicit def weakEqualEvidence[L <: PhysType, R <: PhysType]: WeakPhysTypeEqualEvidence[L, R] = macro PhysTypeMacros.Equality.weakEvidence[L, R]
 
-  implicit def decomposition[T <: PhysType]: PhysTypeStringDecomposition[T] = macro PhysTypeMacros.decomposition[T]
+  implicit def decomposition[T <: PhysType]: PhysTypeDecomposition[T] = macro PhysTypeMacros.decomposition[T]
 }
 
-class PhysTypeStringDecomposition[T <: PhysType](val decomposition: Map[String, Int]){
+class PhysTypeDecomposition[T <: PhysType](val decomposition: Map[String, Int]){
   override def toString: String = decomposition.map(p => p._1 + ": " + p._2).mkString("[", ", ", "]")
 }
 class PhysTypeEqualEvidence[L <: PhysType, R <: PhysType]
