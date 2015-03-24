@@ -6,11 +6,11 @@ object PhysTypeConversion{
   protected[phtpe] def inst[From <: PhysType, To <: PhysType]: PhysTypeConversion[From, To] = new PhysTypeConversion[From, To]{}
 }
 
-trait PhysTypedConversion[N, T[_] <: PhysTyped[N, _], -From <: PhysType, +To <: PhysType] {
+trait PhysTypedConversion[N, -From <: PhysType, +To <: PhysType] {
   def mult: N
 }
 
 object PhysTypedConversion{
-  protected[phtpe] def inst[N, T[_] <: PhysTyped[N, _], From <: PhysType, To <: PhysType](c: N): PhysTypedConversion[N, T, From, To] = 
-    new PhysTypedConversion[N, T, From, To]{ def mult: N = c }
+  protected[phtpe] def inst[N, From <: PhysType, To <: PhysType](c: N): PhysTypedConversion[N, From, To] =
+    new PhysTypedConversion[N, From, To]{ def mult: N = c }
 }

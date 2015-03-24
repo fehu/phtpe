@@ -87,7 +87,10 @@ trait PhysTypedImplicits{
     def typeEqual[Tpe2 <: PhysType](implicit ev: WeakPhysTypeEqualEvidence[Tpe, Tpe2]) = ev.equal
 
     def ensureType[Expected <: PhysType: PhysTypeDecomposition](implicit ev: PhysTypeEqualEvidence[Tpe, Expected]): N|Expected =
-      tped.value.of[Expected]
+      tped.value
+
+    def convert[To <: PhysType: PhysTypeDecomposition](implicit conv: PhysTypedConversion[N, Tpe, To]): N|To =
+      num.times(tped.value, conv.mult)
   }
 
   implicit class NumericPhysTypedOps[N](const: N)(implicit num: Numeric[N]){

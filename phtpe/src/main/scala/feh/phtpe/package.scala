@@ -39,6 +39,8 @@ package object phtpe extends PhysType.Composite.Alias with Units.SI.Alias with P
   implicit def weakEqualEvidence[L <: PhysType, R <: PhysType]: WeakPhysTypeEqualEvidence[L, R] = macro PhysTypeMacros.Equality.weakEvidence[L, R]
   implicit def decomposition[T <: PhysType]: PhysTypeDecomposition[T] = macro PhysTypeMacros.decomposition[T]
 
+  def areConvertible[From <: PhysType, To <: PhysType](implicit c: PhysTypeConversion[From, To] = null) = c != null
+
   final type Neutral = PhysType.Neutral
   final def Neutral = PhysType.Neutral
 

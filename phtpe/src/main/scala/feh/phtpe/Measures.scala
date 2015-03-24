@@ -43,6 +43,17 @@ object Measures{
     type Time = MkTime[BigInt]
   }
 
+  trait MeasuresCompatibility[N, SFrom <: PhysTypeSystem, From <: Measures[SFrom],
+                                 STo <: PhysTypeSystem, To <: Measures[STo]]
+    extends AbstractMeasuresCompatibility[N, From, To]
+  {
+    protected def mkMass = conversion[SFrom#Mass, STo#Mass]
+    protected def mkTime = conversion[SFrom#Time, STo#Time]
+    protected def mkDist = conversion[SFrom#Distance, STo#Distance]
+    protected def mkTemp = conversion[SFrom#Temperature, STo#Temperature]
+    protected def mkLumI = conversion[SFrom#LuminousIntensity, STo#LuminousIntensity]
+  }
+
   object SI {
     trait Float extends SI {
       type Mass               = MkMass[scala.Float]
@@ -57,10 +68,8 @@ object Measures{
     }
   }
 
-  class SICompatible[FromS <: PhysTypeSystem, From <: Measures[FromS],
-                     ToS <: PhysTypeSystem, To <: Measures[ToS]] (implicit comp: PhysTypeSystemCompatibility[FromS, ToS]) {
-    protected def conversion[N, PhT[_] <: PhysTyped[N, _], F <: PhysType, T <: PhysType] = PhysTypedConversion.inst[N, PhT, F, T] _
-  }
+  trait SiCompatibility[N, SFrom <: PhysTypeSystem, From <: Measures[SFrom]]
+    extends MeasuresCompatibility[N, SFrom, From, PhysTypeSystem.SI, SI]
 
   trait BigScale extends Measures[PhysTypeSystem.BigScale] with TimeBigInt[PhysTypeSystem.BigScale]
 
@@ -77,4 +86,20 @@ object Measures{
       type Force        <: MkForce[scala.Float, _]
     }
   }
+
+  class BigScaleMeasuresAreSICompatible[N] extends SiCompatibility[N, PhysTypeSystem.BigScale, BigScale]
+
+  object BigScaleMeasuresAreSICompatible{
+    object Float extends BigScaleMeasuresAreSICompatible[Float]{
+      implicit def time = mkTime(((365 * 24 + 5) * 60 + 48) * 60 + 46) //365 days 5 hours 48 minutes 46 seconds
+      implicit def dist = conversion[PhysTypeSystem.BigScale#Distance, PhysTypeSystem.SI#Distance](9.4605284e15f)
+      implicit def mass = mkMass(1)
+      implicit def temp = mkTemp(1)
+      implicit def lumI = mkLumI(1)
+    }
+  }
+}
+
+trait AbstractMeasuresCompatibility[N, From <: AbstractMeasures[_], To <: AbstractMeasures[_]]{
+  protected def conversion[F <: PhysType, T <: PhysType] = PhysTypedConversion.inst[N, F, T] _
 }
