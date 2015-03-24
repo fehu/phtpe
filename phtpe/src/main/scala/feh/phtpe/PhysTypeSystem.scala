@@ -40,5 +40,14 @@ object PhysTypeSystem{
   }
   trait SICompatibility[From <: PhysTypeSystem] extends PhysTypeSystemCompatibility[From, SI]
 
+  trait BigScale extends PhysTypeSystem{
+    type Mass               = Kilogram //todo Kilo@@
+    type Temperature        = Kelvin
+    type LuminousIntensity  = Candela
+    type Distance           = Units.BigScale.LightYear
+    type Time               = Units.BigScale.Year
+  }
+
+  object BigScaleIsSICompatible extends SICompatibility[BigScale]
 }
 

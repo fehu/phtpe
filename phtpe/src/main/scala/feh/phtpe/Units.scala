@@ -59,4 +59,9 @@ object Units{
       final type Farad    = SI.Farad
     }
   }
+
+  object BigScale{
+    class Year private() extends PhysType.Atom
+    class LightYear private() extends PhysType.Atom
+  }
 }

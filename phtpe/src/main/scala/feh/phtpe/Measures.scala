@@ -62,5 +62,19 @@ object Measures{
     protected def conversion[N, PhT[_] <: PhysTyped[N, _], F <: PhysType, T <: PhysType] = PhysTypedConversion.inst[N, PhT, F, T] _
   }
 
+  trait BigScale extends Measures[PhysTypeSystem.BigScale] with TimeBigInt[PhysTypeSystem.BigScale]
 
+  object BigScale{
+    trait Float extends BigScale{
+      type Mass               = MkMass[scala.Float]
+      type Temperature        = MkTemperature[scala.Float]
+//      type Luminance          = MkLuminance[_]
+      type LuminousIntensity  = MkLuminousIntensity[scala.Float]
+
+      type Distance     <: MkDistance[scala.Float, _]
+      type Speed        <: MkSpeed[scala.Float, _]
+      type Acceleration <: MkAcceleration[scala.Float, _]
+      type Force        <: MkForce[scala.Float, _]
+    }
+  }
 }
