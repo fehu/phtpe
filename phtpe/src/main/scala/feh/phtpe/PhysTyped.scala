@@ -3,8 +3,11 @@ package feh.phtpe
 import feh.phtpe.PhysType.IntegerConstant
 
 /** A physically typed value */
-abstract class PhysTyped[N: Numeric, Tpe <: PhysType: PhysTypeDecomposition]{
-  val value: N
+abstract class PhysTyped[Num: Numeric, Tpe <: PhysType: PhysTypeDecomposition]{
+  val value: Num
+
+  type N = Num
+  type T = Tpe
 
   override def toString: String = value + "|" + implicitly[PhysTypeDecomposition[Tpe]].toString
 }
