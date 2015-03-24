@@ -15,6 +15,8 @@ import vectors._ // "feh.phtpe" %% "vectors" needed
 |[PhysType](phtpe/src/main/scala/feh/phtpe/PhysType.scala)|A physical type|[specification](test-reports/feh.phtpe.PhysTypeSpec.md) ([source](phtpe/src/test/scala/feh/phtpe/PhysTypeSpec.scala))|
 |[PhysTyped[Num, Tpe]](phtpe/src/main/scala/feh/phtpe/PhysTyped.scala)|A physicaly typed numeric value|[specification](test-reports/feh.phtpe.PhysTypedSpec.md) ([source](phtpe/src/test/scala/feh/phtpe/PhysTypedSpec.scala))|
 |[Prefixes](phtpe/src/main/scala/feh/phtpe/Prefixes.scala)|SI prefixes for physicaly typed numerics|[specification](test-reports/feh.phtpe.PhysTypedPrefixSpec.md) ([source](phtpe/src/test/scala/feh/phtpe/PhysTypedPrefixSpec.scala))|
+|Measures|PhysTypeSystem and Measures|[specification](test-reports/feh.phtpe.MeasuresSpec.md) ([source](phtpe/src/test/scala/feh/phtpe/MeasuresSpec.scala))|
+|Conversions|Conversion and Compatibility|[specification](test-reports/feh.phtpe.ConversionSpec.md) ([source](phtpe/src/test/scala/feh/phtpe/ConversionSpec.scala))|
 | | Some Examples | [Examples](test-reports/feh.phtpe.MiscExamples.md) |
 | | Collections of PhysTyped |[specification](test-reports/feh.phtpe.CollectionsOfPhisTypedSpec.md) ([source](phtpe/src/test/scala/feh/phtpe/CollectionsOfPhisTypedSpec.scala))|
 |[AbstractVector](phtpe/src/main/scala/feh/phtpe/AbstractVector.scala)| Abstract Vector, supporting physical typing | |
