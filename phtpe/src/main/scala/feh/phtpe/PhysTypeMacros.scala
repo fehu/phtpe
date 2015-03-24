@@ -111,6 +111,8 @@ class PhysTypeMacros[C <: whitebox.Context](val c: C){
           .ensuring(_.size == 1).head
 
         debugging("composite", rec(declaration, inverse))
+      case ExistentialType(_, t) => rec(t, inverse)
+      case x => c.abort(NoPosition, "atomPowers:rec: " + showRaw(x))
     }
 
     debugging("res", rec(Tpe.tpe, false).filter(_._2 != 0))
