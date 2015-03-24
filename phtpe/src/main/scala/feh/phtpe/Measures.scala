@@ -91,11 +91,11 @@ object Measures{
 
   object BigScaleMeasuresAreSICompatible{
     object Float extends BigScaleMeasuresAreSICompatible[Float]{
-      implicit def time = mkTime(((365 * 24 + 5) * 60 + 48) * 60 + 46) //365 days 5 hours 48 minutes 46 seconds
-      implicit def dist = conversion[PhysTypeSystem.BigScale#Distance, PhysTypeSystem.SI#Distance](9.4605284e15f)
-      implicit def mass = mkMass(1)
-      implicit def temp = mkTemp(1)
-      implicit def lumI = mkLumI(1)
+      implicit lazy val time = mkTime(((365 * 24 + 5) * 60 + 48) * 60 + 46) //365 days 5 hours 48 minutes 46 seconds
+      implicit lazy val dist = mkDist(9.4605284e15f)
+      implicit lazy val mass = mkMass(1)
+      implicit lazy val temp = mkTemp(1)
+      implicit lazy val lumI = mkLumI(1)
     }
   }
 }
