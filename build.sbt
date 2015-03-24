@@ -3,7 +3,8 @@ lazy val commonSettings = Seq(
   organization := "feh.phtpe",
   crossScalaVersions := Seq("2.11.5"),
   scalaVersion := crossScalaVersions.value.head,
-  scalacOptions in (Compile, doc) ++= Seq("-diagrams", "-diagrams-max-classes", "50", "-diagrams-max-implicits", "20")
+  scalacOptions in (Compile, doc) ++= Seq("-diagrams", "-diagrams-max-classes", "50", "-diagrams-max-implicits", "20"),
+  resolvers += "Fehu's github repo" at "http://fehu.github.io/repo"
 )
 
 lazy val root = project.in(file("."))

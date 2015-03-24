@@ -61,5 +61,7 @@ class PhysTypedSpec extends Specification {
     ${ 3.of[s] ^ _2 phEquals 9.of[s] must beFalse}
     ${ 3.of[s] ^ _2 phEquals 10.of[s^_2] must beFalse}
 
+  __As Argument__
+    ${def foo(v: Float | Kilogram) = true; foo(5f)}
   """
 }

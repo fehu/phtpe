@@ -48,7 +48,7 @@ object PhysTypeMacros {
     import c.universe._
 
     val m = new PhysTypeMacros[c.type](c)
-    val entries = m.atomPowers[T].map{ case (name, count) => q"$name -> $count" }.toList
+    val entries = m.atomPowers[T].map{ case (name, count) => q"${name.name.decodedName.toString} -> $count" }.toList
     c.Expr[PhysTypeDecomposition[T]](q"new PhysTypeDecomposition[${weakTypeOf[T]}](Map(..$entries))")
   }
 }
@@ -73,16 +73,16 @@ class PhysTypeMacros[C <: whitebox.Context](val c: C){
     (sameKeys && keysAreEqual, powTpe, powExpected)
   }
   
-  def atomPowers[Tpe <: PhysType](implicit Tpe: WeakTypeTag[Tpe]): Map[String, Int] = {
+  def atomPowers[Tpe <: PhysType](implicit Tpe: WeakTypeTag[Tpe]): Map[Symbol, Int] = {
 
-    def debugging(what: String, f: => Map[String, Int]) = {
+    def debugging(what: String, f: => Map[Symbol, Int]) = {
       if(DEBUG) c.info(NoPosition, what, true)
       val res = f
       if(DEBUG) c.info(NoPosition, what + ": " + res, true)
       res
     }
 
-    def rec(tpe: Type, inverse: Boolean): Map[String, Int] = tpe match {
+    def rec(tpe: Type, inverse: Boolean): Map[Symbol, Int] = tpe match {
       case t@TypeRef(_, op, args) if t <:< c.typeOf[PhysType.Composite] && !(t <:< typeOf[PhysType.Unit]) =>
         op.asType.name.decodedName.toString -> args match {
           case ("/" | "Division" ,  l :: r :: Nil) =>
@@ -92,7 +92,7 @@ class PhysTypeMacros[C <: whitebox.Context](val c: C){
           case (o@("^" | "^-" | "Power"),  t :: p :: Nil) =>
             def const = constantTypeToInt(p) * (if(inverse) -1 else 1) * (if(o == "^") 1 else -1)
             debugging("^",
-              if(t <:< typeOf[PhysType.Atom]) Map(t.typeSymbol.name.decodedName.toString -> const)
+              if(t <:< typeOf[PhysType.Atom]) Map(t.typeSymbol -> const) //.name.decodedName.toString
               else rec(t, inverse = false).mapValues(_ * const)
             )
           case _ /* alias */ => rec(t.dealias, inverse)
@@ -100,7 +100,7 @@ class PhysTypeMacros[C <: whitebox.Context](val c: C){
       }
       case atom if atom <:< typeOf[PhysType.Neutral] => Map()
       case atom if atom <:< typeOf[PhysType.Atom] =>
-        debugging("atom", Map(atom.typeSymbol.name.decodedName.toString -> (if(inverse) -1 else 1)))
+        debugging("atom", Map(atom.typeSymbol -> (if(inverse) -1 else 1))) //.name.decodedName.toString
       case composite if composite <:< typeOf[PhysType.Unit] =>
         val declaration = composite.baseClasses.map(_.typeSignature)
           .collect {
