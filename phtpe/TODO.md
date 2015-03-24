@@ -8,4 +8,4 @@
 - [x] modify refactor-reports.sc to work with bundled tests, like `PhysTypedPrefixSpec`
 - [ ] implicit conversions of underlying numerics
 
-see also [TodoSpec](test-reports/feh.phtpe.TodoSpec.md) ([source](src/test/scala/feh/phtpe/TodoSpec.scala))
+see also [TodoSpec](../test-reports/feh.phtpe.TodoSpec.md) ([source](src/test/scala/feh/phtpe/TodoSpec.scala))

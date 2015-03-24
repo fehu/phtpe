@@ -30,6 +30,6 @@ lazy val testSettings = TestReportsCopy.settings ++ Seq(
   libraryDependencies += "org.specs2" %% "specs2" % "2.4.15" % "test",
   resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
 
-  TestReportsCopy.copyTestReportsDir <<= baseDirectory(base => Some(base / "test-reports")),
+  TestReportsCopy.copyTestReportsDir := Some(file("./test-reports")),
   TestReportsCopy.autoAddReportsToGit := true
 )

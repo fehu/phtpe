@@ -1,8 +1,7 @@
 import feh.util.file._
 
-val subProject = args(0)
 val projectDir = sys.props("user.dir")
-val reportsDir = projectDir / subProject / "test-reports"
+val reportsDir = projectDir / "test-reports"
 val files = reportsDir.file.listFiles().toList
 println("files: " + files.map(_.name).mkString(", "))
 

@@ -44,5 +44,5 @@
    
 ```
 
-| Vectors Specification | Finished in 11 ms | 22 examples, 0 failure, 0 error |
+| Vectors Specification | Finished in 76 ms | 22 examples, 0 failure, 0 error |
 

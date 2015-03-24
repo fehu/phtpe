@@ -15,10 +15,10 @@
         }
       }
       val speedApproximator1 = new SpeedInAtmosphereApproximation(10.of[kg], _ * 0.01.of[kg/s])
-	  val speedApproximator2 = new SpeedInAtmosphereApproximation(10, _ / 100.of[s/kg])
+	[+] val speedApproximator2 = new SpeedInAtmosphereApproximation(10, _ / 100.of[s/kg]) 
   
    
 ```
 
-| PhysTyped Usage Examples | Finished in 12 ms | 1 example, 3 expectations, 0 failure, 0 error |
+| PhysTyped Usage Examples | Finished in 1 ms | 1 example, 3 expectations, 0 failure, 0 error |
 

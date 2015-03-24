@@ -41,5 +41,5 @@
    
 ```
 
-| Vector Measures Specification | Finished in 11 ms | 20 examples, 22 expectations, 0 failure, 0 error |
+| Vector Measures Specification | Finished in 57 ms | 20 examples, 22 expectations, 0 failure, 0 error |
 

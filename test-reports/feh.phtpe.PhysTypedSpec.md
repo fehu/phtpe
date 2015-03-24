@@ -66,9 +66,13 @@
 	[+] 3.of[s] ^ _2 phEquals 9.of[s^_2]  
 	[+] 3.of[s] ^ _2 phEquals 9.of[s] must beFalse 
 	[+] 3.of[s] ^ _2 phEquals 10.of[s^_2] must beFalse 
-  
+```
+
+[+] __As Argument__
+```scala
+	[+] def foo(v: Float | Kilogram) = true; foo(5f) 
    
 ```
 
-| PhysTypedSpec | Finished in 13 ms | 34 examples, 0 failure, 0 error |
+| PhysTypedSpec | Finished in 21 ms | 35 examples, 0 failure, 0 error |
 
