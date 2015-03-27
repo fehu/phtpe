@@ -3,7 +3,7 @@ package feh.phtpe
 import org.specs2.Specification
 import feh.phtpe.Units.BigScale.{Year, LightYear}
 import feh.phtpe.PhysTypeSystem.BigScaleIsSICompatible
-import feh.phtpe.Measures.BigScaleMeasuresAreSICompatible
+import feh.phtpe.Measures.BigScaleMeasuresAreSICompatible.Float._
 
 class ConversionSpec extends Specification{
   def is = s2""" ${ "Conversion and Compatibility".title }
@@ -13,8 +13,8 @@ class ConversionSpec extends Specification{
     ${import BigScaleIsSICompatible._; areConvertible[Year, Second] must beTrue}
 
     __Measures Conversion__
-    ${import BigScaleMeasuresAreSICompatible.Float._; 4f.of[Kilogram].convert[Kilogram] =@= 4f.of[Kilogram]}
-    ${import BigScaleMeasuresAreSICompatible.Float._; def foo(l: Float|LightYear) = l.convert[Meter]; foo(2).value == 9.4605284e15f * 2}
+    ${4f.of[Kilogram].convert[Kilogram] =@= 4f.of[Kilogram]}
+    ${def foo(l: Float|LightYear) = l.convert[Meter]; foo(2).value == 9.4605284e15f * 2}
 
   """
 }
